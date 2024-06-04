@@ -1,4 +1,4 @@
-package com.how.dailyloger.navigation
+package com.arvind.assistant.navigation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

@@ -1,14 +1,25 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
+    id("app.cash.sqldelight")
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.arvind.assistant")
+            verifyMigrations.set(true)
+        }
+    }
 }
 
 android {
-    namespace = "com.how.dailyloger"
+    namespace = "com.arvind.assistant"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.how.dailyloger"
+        applicationId = "com.arvind.assistant"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

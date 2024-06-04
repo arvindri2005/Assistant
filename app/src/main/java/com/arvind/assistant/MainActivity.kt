@@ -1,8 +1,7 @@
-package com.how.dailyloger
+package com.arvind.assistant
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.how.dailyloger.navigation.BottomNavController
-import com.how.dailyloger.ui.theme.DailyLogerTheme
+import com.arvind.assistant.navigation.BottomNavController
+import com.arvind.assistant.ui.theme.DailyLogerTheme
 
 class MainActivity : ComponentActivity() {
 

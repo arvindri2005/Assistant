@@ -1,4 +1,4 @@
-package com.how.dailyloger
+package com.arvind.assistant
 
 import org.junit.Test
 

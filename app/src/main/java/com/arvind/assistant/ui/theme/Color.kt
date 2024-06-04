@@ -1,4 +1,4 @@
-package com.how.dailyloger.ui.theme
+package com.arvind.assistant.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

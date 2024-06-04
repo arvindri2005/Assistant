@@ -1,12 +1,12 @@
-package com.how.dailyloger.navigation
+package com.arvind.assistant.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.how.dailyloger.HomeScreen
-import com.how.dailyloger.SearchScreen
-import com.how.dailyloger.SettingsScreen
+import com.arvind.assistant.HomeScreen
+import com.arvind.assistant.SearchScreen
+import com.arvind.assistant.SettingsScreen
 
 @Composable
 fun BottomNavController(navController: NavHostController) {

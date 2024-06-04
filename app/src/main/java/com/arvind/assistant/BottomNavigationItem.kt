@@ -1,4 +1,4 @@
-package com.how.dailyloger
+package com.arvind.assistant
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
