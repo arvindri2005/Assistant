@@ -1,4 +1,9 @@
 CREATE TABLE Course (
     courseId INTEGER PRIMARY KEY AUTOINCREMENT,
-    courseName TEXT
+    courseName TEXT NOT NULL,
+    requiredAttendance REAL NOT NULL
 );
+
+createCourse:
+INSERT INTO Course (courseName, requiredAttendance)
+VALUES (?, ?);
