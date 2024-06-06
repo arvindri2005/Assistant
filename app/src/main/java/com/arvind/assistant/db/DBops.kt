@@ -1,10 +1,14 @@
 package com.arvind.assistant.db
 
 import android.content.Context
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.arvind.assistant.Database
 import com.arvind.assistant.applicationContextGlobal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 
 fun getAndroidSqliteDriver(context: Context) = AndroidSqliteDriver(
@@ -33,6 +37,18 @@ class DBOps(
             requiredAttendance = requiredAttendance
         )
 
+    }
+
+    fun getAllCourses(): Flow<List<CourseDetails>>{
+        return queries.getAllCourses(
+            mapper = { courseId, courseName, requiredAttendance ->
+                CourseDetails(
+                    courseId = courseId,
+                    courseName = courseName,
+                    requiredAttendance = requiredAttendance
+                )
+            }
+        ).asFlow().mapToList(Dispatchers.IO)
     }
 
     companion object {

@@ -1,14 +1,15 @@
 package com.arvind.assistant.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
 import com.arvind.assistant.CreateCourseScreen
 import com.arvind.assistant.HomeScreen
+import com.arvind.assistant.MyCoursesScreen
 import com.arvind.assistant.SearchScreen
-import com.arvind.assistant.SettingsScreen
 import com.arvind.assistant.db.DBOps
 
 @Composable
@@ -32,7 +33,15 @@ fun BottomNavController(navController: NavHostController) {
             ProfileScreen()
         }
         composable("Settings") {
-            SettingsScreen()
+            CompositionLocalProvider(
+                androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
+            ) {
+                MyCoursesScreen(
+                    courses = dbOps.getAllCourses()
+                        .collectAsStateWithLifecycle(initialValue = listOf()).value,
+                )
+            }
+
         }
         composable("CreateCourse"){
             CreateCourseScreen(
@@ -40,6 +49,13 @@ fun BottomNavController(navController: NavHostController) {
                     dbOps.createCourse(courseName, requiredAttendance)
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable("MyCourses"){
+            MyCoursesScreen(
+                courses = dbOps.getAllCourses()
+                    .collectAsStateWithLifecycle(initialValue = listOf()).value,
             )
         }
     }

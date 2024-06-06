@@ -7,3 +7,11 @@ CREATE TABLE Course (
 createCourse:
 INSERT INTO Course (courseName, requiredAttendance)
 VALUES (?, ?);
+
+getAllCourses:
+SELECT
+    Course.courseId,
+    Course.courseName,
+    Course.requiredAttendance
+FROM
+    Course;
