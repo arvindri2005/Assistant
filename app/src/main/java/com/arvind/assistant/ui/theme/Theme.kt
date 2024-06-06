@@ -203,7 +203,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun DailyLogerTheme(
+fun AssistantTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
