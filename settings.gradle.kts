@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Daily Loger"
+rootProject.name = "Assistant"
 include(":app")
