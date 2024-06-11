@@ -22,9 +22,15 @@ fun BottomNavController(navController: NavHostController) {
         startDestination = "Home"
     ){
         composable("Home"){
-            HomeScreen {
-                navController.navigate("CreateCourse")
-            }
+//            HomeScreen {
+//                navController.navigate("CreateCourse")
+//            }
+            CreateCourseScreen(
+                createCourse = { courseName, requiredAttendance ->
+                    dbOps.createCourse(courseName, requiredAttendance)
+                    navController.popBackStack()
+                }
+            )
         }
         composable("Search"){
             SearchScreen()

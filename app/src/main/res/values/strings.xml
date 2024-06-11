@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Assistant</string>
+
+    <string-array name="add_schedule_class_bottom_sheet_tabs">
+        <item>Weekday</item>
+        <item>Start Time</item>
+        <item>End Time</item>
+    </string-array>
 </resources>
