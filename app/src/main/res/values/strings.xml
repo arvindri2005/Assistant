@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Assistant</string>
+    <string name="time_range">%1$s to %2$s</string>
 
     <string-array name="add_schedule_class_bottom_sheet_tabs">
         <item>Weekday</item>

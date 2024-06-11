@@ -1,7 +1,9 @@
 package com.arvind.assistant
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -24,10 +26,12 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import com.arvind.assistant.components.AssistantButton
 import com.arvind.assistant.components.AssistantFAB
 import com.arvind.assistant.components.AssistantTextField
 import com.arvind.assistant.createCourse.ScheduleBottomSheet
+import com.arvind.assistant.createCourse.ScheduleClassListItem
 import com.arvind.assistant.db.ClassScheduleDetails
 
 
@@ -57,7 +61,7 @@ fun CreateCourseScreen(
         mutableStateOf(false)
     }
 
-    var classToUpdateIndex: MutableState<Nothing?> = rememberSaveable{
+    var classToUpdateIndex: MutableState<Int?> = rememberSaveable{
         mutableStateOf(null)
     }
     val scope = rememberCoroutineScope()
@@ -74,7 +78,7 @@ fun CreateCourseScreen(
                 }
             )
         }
-    ) {
+    ) { it ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -103,16 +107,41 @@ fun CreateCourseScreen(
                 AssistantButton(text = "Add Schedule Classes") {
                     showAddClassBottomSheet.value = true
                 }
+
+                Column {
+                    classesForTheCourse.forEachIndexed { index, classDetail ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        ScheduleClassListItem(
+                            item = classDetail,
+                            onClick = {
+                                classToUpdateIndex.value = index
+                                showAddClassBottomSheet.value= true
+                            },
+                            onCloseClick = {
+                                classesForTheCourse.removeAt(index)
+                            }
+                        )
+                    }
+                }
                 
                 
             }
             
             if(showAddClassBottomSheet.value){
-                ScheduleBottomSheet(onDismissRequest = { showAddClassBottomSheet.value = false }) {
+                ScheduleBottomSheet(
+                    initialState = classToUpdateIndex.value?.let { classesForTheCourse[it] },
 
-                }
+                    onCreateClass = { params ->
+                            classToUpdateIndex.value?.let {
+                            classesForTheCourse[it] = params
+//                            classToUpdateIndex.value = null
+                        } ?: classesForTheCourse.add(params)
+                    },
+                    onDismissRequest = {
+                        showAddClassBottomSheet.value = false
+                    }
+                )
             }
-
         }
     }
 
