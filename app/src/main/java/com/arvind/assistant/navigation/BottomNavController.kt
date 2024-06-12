@@ -26,8 +26,8 @@ fun BottomNavController(navController: NavHostController) {
 //                navController.navigate("CreateCourse")
 //            }
             CreateCourseScreen(
-                createCourse = { courseName, requiredAttendance ->
-                    dbOps.createCourse(courseName, requiredAttendance)
+                createCourse = { courseName, requiredAttendance, scheduleClasses ->
+                    dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
                     navController.popBackStack()
                 }
             )
@@ -50,12 +50,12 @@ fun BottomNavController(navController: NavHostController) {
 
         }
         composable("CreateCourse"){
-            CreateCourseScreen(
-                createCourse = { courseName, requiredAttendance ->
-                    dbOps.createCourse(courseName, requiredAttendance)
-                    navController.popBackStack()
-                }
-            )
+//            CreateCourseScreen(
+//                createCourse = { courseName, requiredAttendance ->
+//                    dbOps.createCourse(courseName, requiredAttendance)
+//                    navController.popBackStack()
+//                }
+//            )
         }
 
         composable("MyCourses"){

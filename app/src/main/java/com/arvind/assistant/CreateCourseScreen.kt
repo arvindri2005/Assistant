@@ -37,7 +37,7 @@ import com.arvind.assistant.db.ClassScheduleDetails
 
 @Composable
 fun CreateCourseScreen(
-    createCourse: (courseName: String, requiredAttendance: Double) -> Unit
+    createCourse: (courseName: String, requiredAttendance: Double, scheduleClasses: List<ClassScheduleDetails>) -> Unit
 ){
 
     val courseName = rememberSaveable{
@@ -74,7 +74,7 @@ fun CreateCourseScreen(
                 icon = Icons.Filled.Add,
                 text = "Save",
                 onClick = {
-                    createCourse(courseName.value, requiredAttendance.doubleValue)
+                    createCourse(courseName.value, requiredAttendance.doubleValue, classesForTheCourse)
                 }
             )
         }

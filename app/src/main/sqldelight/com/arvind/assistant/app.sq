@@ -1,12 +1,37 @@
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+
 CREATE TABLE Course (
     courseId INTEGER PRIMARY KEY AUTOINCREMENT,
     courseName TEXT NOT NULL,
     requiredAttendance REAL NOT NULL
 );
 
+CREATE TABLE CourseSchedule(
+    scheduleId INTEGER PRIMARY KEY AUTOINCREMENT,
+    courseId INTEGER NOT NULL,
+    weekDay INTEGER AS DayOfWeek NOT NULL,
+    startTime TEXT AS LocalTime NOT NULL,
+    endTime TEXT AS LocalTime NOT NULL,
+    includeInSchedule INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT fk_course
+          FOREIGN KEY (courseId)
+          REFERENCES Course (courseId)
+          ON DELETE CASCADE
+);
+
+getLastInsertRowID:
+SELECT last_insert_rowid();
+
+
 createCourse:
 INSERT INTO Course (courseName, requiredAttendance)
 VALUES (?, ?);
+
+createCourseScheduleForCourse:
+INSERT INTO CourseSchedule (courseId, weekDay, startTime, endTime, includeInSchedule)
+VALUES (?, ?, ?, ?, ?);
+
 
 getAllCourses:
 SELECT
