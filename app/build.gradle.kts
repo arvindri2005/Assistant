@@ -87,4 +87,8 @@ dependencies {
     implementation(libs.android.driver)
     implementation(libs.coroutines.extensions)
     implementation(libs.primitive.adapters)
+
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+
+
 }
