@@ -1,4 +1,4 @@
-package com.arvind.assistant
+package com.arvind.assistant.screens.createCourse
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +13,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import com.arvind.assistant.components.AssistantButton
 import com.arvind.assistant.components.AssistantFAB
 import com.arvind.assistant.components.AssistantTextField
-import com.arvind.assistant.createCourse.ScheduleBottomSheet
-import com.arvind.assistant.createCourse.ScheduleClassListItem
 import com.arvind.assistant.db.ClassScheduleDetails
+import com.arvind.assistant.screens.createCourse.components.ScheduleBottomSheet
+import com.arvind.assistant.screens.createCourse.components.ScheduleClassListItem
 
 
 @Composable

@@ -1,4 +1,4 @@
-package com.arvind.assistant.createCourse
+package com.arvind.assistant.screens.createCourse.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box

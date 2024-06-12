@@ -6,8 +6,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.arvind.assistant.CreateCourseScreen
-import com.arvind.assistant.HomeScreen
+import com.arvind.assistant.screens.createCourse.CreateCourseScreen
 import com.arvind.assistant.MyCoursesScreen
 import com.arvind.assistant.SearchScreen
 import com.arvind.assistant.db.DBOps
