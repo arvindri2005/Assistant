@@ -23,20 +23,20 @@ fun BottomNavController(navController: NavHostController) {
         { item: AttendanceRecordHybrid, status: CourseClassStatus ->
             when (item) {
                 is AttendanceRecordHybrid.ExtraClass -> {
-//                    dbOps.markAttendanceForExtraClass(
-//                        item.extraClassId,
-//                        status
-//                    )
+                    dbOps.markAttendanceForExtraClass(
+                        item.extraClassId,
+                        status
+                    )
                 }
 
                 is AttendanceRecordHybrid.ScheduledClass -> {
-//                    dbOps.markAttendanceForScheduleClass(
-//                        attendanceId = item.attendanceId,
-//                        classStatus = status,
-//                        scheduleId = item.scheduleId,
-//                        date = item.date,
-//                        courseId = item.courseId
-//                    )
+                    dbOps.markAttendanceForScheduleClass(
+                        attendanceId = item.attendanceId,
+                        classStatus = status,
+                        scheduleId = item.scheduleId,
+                        date = item.date,
+                        courseId = item.courseId
+                    )
                 }
             }
         }

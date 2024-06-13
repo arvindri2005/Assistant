@@ -138,7 +138,23 @@ class DBOps(
         }
     }
 
+    fun markAttendanceForScheduleClass(
+        attendanceId: Long?,
+        classStatus: CourseClassStatus,
+        scheduleId: Long?,
+        date: LocalDate,
+        courseId: Long
+    ) {
+        if (attendanceId != null)
+            queries.markAttendance(attendanceId, classStatus, scheduleId, date, courseId)
+        else queries.markAttendanceInsert(classStatus, scheduleId, date, courseId)
+    }
 
+
+    fun markAttendanceForExtraClass(
+        extraClassId: Long,
+        status: CourseClassStatus
+    ) = queries.updateExtraClassStatus(extraClassId = extraClassId, status = status)
 
 
 

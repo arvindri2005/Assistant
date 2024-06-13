@@ -52,6 +52,20 @@ CREATE TABLE ExtraClasses (
 );
 
 
+updateExtraClassStatus:
+UPDATE ExtraClasses
+SET classStatus = :status
+WHERE extraClassId = :extraClassId;
+
+markAttendance:
+INSERT OR REPLACE INTO Attendance (attendanceId, classStatus, scheduleId, date, courseId)
+VALUES (?,  ?, ?, ?, ?);
+
+
+markAttendanceInsert:
+INSERT  INTO Attendance (classStatus, scheduleId, date, courseId)
+VALUES ( ?, ?, ?, ?);
+
 getLastInsertRowID:
 SELECT last_insert_rowid();
 
