@@ -1,4 +1,6 @@
+import com.arvind.assistant.db.CourseClassStatus;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 CREATE TABLE Course (
@@ -20,6 +22,36 @@ CREATE TABLE CourseSchedule(
           ON DELETE CASCADE
 );
 
+CREATE TABLE Attendance(
+    attendanceId INTEGER PRIMARY KEY AUTOINCREMENT,
+    scheduleId INTEGER,
+    courseId INTEGER,
+    classStatus TEXT AS CourseClassStatus NOT NULL,
+    date TEXT AS LocalDate NOT NULL,
+    CONSTRAINT fk_schedule
+           FOREIGN KEY (scheduleId)
+           REFERENCES CourseSchedule (scheduleId)
+           ON DELETE CASCADE,
+        CONSTRAINT fk_course
+            FOREIGN KEY (courseId)
+            REFERENCES Course (courseId)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE ExtraClasses (
+    extraClassId INTEGER PRIMARY KEY AUTOINCREMENT,
+    courseId INTEGER NOT NULL,
+    date TEXT AS LocalDate NOT NULL,
+    startTime TEXT AS LocalTime NOT NULL,
+    endTime TEXT AS LocalTime NOT NULL,
+    classStatus TEXT AS CourseClassStatus NOT NULL,
+    CONSTRAINT fk_course
+        FOREIGN KEY (courseId)
+        REFERENCES Course (courseId)
+        ON DELETE CASCADE
+);
+
+
 getLastInsertRowID:
 SELECT last_insert_rowid();
 
@@ -32,6 +64,26 @@ createCourseScheduleForCourse:
 INSERT INTO CourseSchedule (courseId, weekDay, startTime, endTime, includeInSchedule)
 VALUES (?, ?, ?, ?, ?);
 
+
+getCourseListForToday:
+SELECT Attendance.attendanceId, CourseSchedule.scheduleId, Course.courseId, Course.courseName, CourseSchedule.startTime, CourseSchedule.endTime,
+       CASE WHEN Attendance.classStatus IS NULL THEN 'Unset'
+            ELSE Attendance.classStatus
+       END AS classStatus,
+       Attendance.date
+FROM CourseSchedule
+JOIN Course ON CourseSchedule.courseId = Course.courseId AND CourseSchedule.weekDay = strftime('%w', 'now')
+LEFT JOIN Attendance ON CourseSchedule.scheduleId = Attendance.scheduleId AND Attendance.date = DATE('now', 'localtime')
+WHERE CourseSchedule.includeInSchedule <> 0
+AND DATE('now', 'localtime') = Attendance.date
+OR (Attendance.scheduleId IS NULL AND DATE('now', 'localtime') = DATE('now', 'localtime'));
+
+
+getExtraClassesListForToday:
+SELECT Course.courseId, Course.courseName, ExtraClasses.startTime, ExtraClasses.endTime, ExtraClasses.classStatus, ExtraClasses.extraClassId, ExtraClasses.date
+FROM Course
+JOIN ExtraClasses ON Course.courseId = ExtraClasses.courseId
+WHERE ExtraClasses.date = DATE('now', 'localtime');
 
 getAllCourses:
 SELECT

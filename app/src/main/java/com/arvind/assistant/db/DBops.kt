@@ -1,16 +1,22 @@
 package com.arvind.assistant.db
 
 import android.content.Context
+import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.arvind.assistant.Attendance
 import com.arvind.assistant.CourseSchedule
 import com.arvind.assistant.Database
+import com.arvind.assistant.ExtraClasses
 import com.arvind.assistant.applicationContextGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 
 
@@ -21,13 +27,26 @@ fun getAndroidSqliteDriver(context: Context) = AndroidSqliteDriver(
 )
 
 fun getSqliteDB(driver: SqlDriver): Database{
+    val enumAdapter = EnumColumnAdapter<CourseClassStatus>()
     return Database(
         driver = driver,
+        AttendanceAdapter = Attendance.Adapter(
+            classStatusAdapter = enumAdapter,
+            dateAdapter = LocalDateAdapter
+        ),
+
         CourseScheduleAdapter = CourseSchedule.Adapter(
             weekDayAdapter = DayOfWeekAdapter,
             startTimeAdapter = LocalTimeAdapter,
             endTimeAdapter = LocalTimeAdapter
         ),
+        ExtraClassesAdapter = ExtraClasses.Adapter(
+            dateAdapter = LocalDateAdapter,
+            startTimeAdapter = LocalTimeAdapter,
+            endTimeAdapter = LocalTimeAdapter,
+            classStatusAdapter = enumAdapter
+        )
+
 
     )
 }
@@ -74,6 +93,52 @@ class DBOps(
             }
         ).asFlow().mapToList(Dispatchers.IO)
     }
+
+
+    fun getScheduleAndExtraClassesForToday():Flow<List<Pair<AttendanceRecordHybrid, AttendanceCounts>>>{
+        val scheduleClassesFlow: Flow<List<AttendanceRecordHybrid>> = queries.getCourseListForToday(
+            mapper = { attendanceId, scheduleId, courseId, courseName, startTime, endTime, classStatus, date ->
+                AttendanceRecordHybrid.ScheduledClass(
+                    attendanceId = attendanceId,
+                    scheduleId = scheduleId,
+                    startTime = startTime,
+                    endTime = endTime,
+                    courseName = courseName,
+                    date = date ?: LocalDate.now(),
+                    classStatus = CourseClassStatus.fromString(classStatus),
+                    courseId = courseId
+                )
+            }
+        ).asFlow().mapToList(Dispatchers.IO)
+        val extraClassesFlow: Flow<List<AttendanceRecordHybrid>> =
+            queries.getExtraClassesListForToday(mapper = { courseId, courseName, startTime, endTime, classStatus, extraClassId, date ->
+                AttendanceRecordHybrid.ExtraClass(
+                    extraClassId = extraClassId,
+                    startTime = startTime,
+                    endTime = endTime,
+                    courseName = courseName,
+                    date = date,
+                    classStatus = classStatus,
+                    courseId = courseId
+                )
+            }).asFlow().mapToList(Dispatchers.IO)
+        return scheduleClassesFlow.combine(extraClassesFlow) { list1, list2 ->
+            (list1 + list2).sortedByDescending { it.startTime }
+        }.map { attendanceRecords ->
+            attendanceRecords.map {
+                Pair(it, AttendanceCounts(
+                    present = 100,
+                    absents = 0,
+                    percent = 100.0,
+                    cancels = 0,
+                    unsets = 0L,
+                    requiredPercentage = 75.0
+                ) )
+            }
+        }
+    }
+
+
 
 
 

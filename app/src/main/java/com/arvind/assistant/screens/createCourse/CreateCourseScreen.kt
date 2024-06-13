@@ -32,10 +32,6 @@ fun CreateCourseScreen(
 ){
     val viewModel = viewModel<CreateCourseViewModel>()
 
-
-    var classToUpdateIndex: MutableState<Int?> = rememberSaveable{
-        mutableStateOf(null)
-    }
     Scaffold(
         floatingActionButton = {
             AssistantFAB(
