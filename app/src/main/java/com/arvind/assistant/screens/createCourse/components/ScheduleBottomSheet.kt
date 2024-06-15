@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
@@ -38,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -45,6 +48,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import com.arvind.assistant.R
 import com.arvind.assistant.db.ClassScheduleDetails
 import kotlinx.coroutines.launch
@@ -55,16 +59,17 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-@Preview
 @Composable
 fun ScheduleBottomSheet(
     initialState: ClassScheduleDetails? = null,
-    onDismissRequest: () -> Unit = {},
-    onCreateClass: (ClassScheduleDetails)-> Unit = {}
+    onDismissRequest: () -> Unit,
+    onCreateClass: (ClassScheduleDetails)-> Unit
 ){
+    val configuration = LocalConfiguration.current
+    val screeHeight = configuration.screenHeightDp.dp
 
     ModalBottomSheet(
-        onDismissRequest =onDismissRequest
+        onDismissRequest =onDismissRequest,
     ) {
         var selectedWeekDay = rememberSaveable {
             mutableStateOf(initialState?.dayOfWeek ?: LocalDate.now().dayOfWeek)
@@ -143,7 +148,9 @@ fun ScheduleBottomSheet(
         val pagerState = rememberPagerState(pageCount = { tabs.size })
         val scope = rememberCoroutineScope()
 
-        TabRow(selectedTabIndex =pagerState.currentPage) {
+        TabRow(
+            selectedTabIndex =pagerState.currentPage
+        ) {
             tabs.forEachIndexed { index, tabName ->
                 Tab(
                     onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
@@ -157,68 +164,79 @@ fun ScheduleBottomSheet(
         var pagerMinSize by remember {
             mutableIntStateOf(0)
         }
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.heightIn(min = with(LocalDensity.current) { pagerMinSize.toDp() })
-        ) { page ->
-            when (page) {
-                0 -> {
-                    Column(
-                        Modifier
-                            .selectableGroup()
-                            .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) }) {
-                        DayOfWeek.entries.forEach { dayOfWeek ->
-                            Row(
+
+        LazyColumn {
+            item{
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.heightIn(min = with(LocalDensity.current) { pagerMinSize.toDp() })
+                ) { page ->
+                    when (page) {
+                        0 -> {
+                            Column(
                                 Modifier
+                                    .selectableGroup()
+                                    .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) }
+                            ){
+                                DayOfWeek.entries.forEach { dayOfWeek ->
+                                    Row(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(56.dp)
+                                            .selectable(
+                                                selected = (selectedWeekDay.value == dayOfWeek),
+                                                onClick = { selectedWeekDay.value = dayOfWeek },
+                                                role = Role.RadioButton
+                                            )
+                                            .padding(horizontal = 16.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        RadioButton(
+                                            selected = (dayOfWeek == selectedWeekDay.value),
+                                            onClick = null // null recommended for accessibility with screen readers
+                                        )
+                                        Text(
+                                            text = dayOfWeek.getDisplayName(
+                                                TextStyle.FULL,
+                                                Locale.getDefault()
+                                            ),
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            modifier = Modifier.padding(start = 16.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        1 -> {
+                            Box(
+                                modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(56.dp)
-                                    .selectable(
-                                        selected = (selectedWeekDay.value == dayOfWeek),
-                                        onClick = { selectedWeekDay.value = dayOfWeek },
-                                        role = Role.RadioButton
-                                    )
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) },
+                                contentAlignment = Alignment.Center
                             ) {
-                                RadioButton(
-                                    selected = (dayOfWeek == selectedWeekDay.value),
-                                    onClick = null // null recommended for accessibility with screenreaders
-                                )
-                                Text(
-                                    text = dayOfWeek.getDisplayName(
-                                        TextStyle.FULL,
-                                        Locale.getDefault()
-                                    ),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(start = 16.dp)
-                                )
+                                TimePicker(state = startTime)
+                            }
+                        }
+                        2 -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                TimePicker(state = endTime.value)
                             }
                         }
                     }
                 }
-                1 -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        TimePicker(state = startTime)
-                    }
-                }
-                2 -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        TimePicker(state = endTime.value)
-                    }
-                }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+            , horizontalArrangement = Arrangement.End
+        ) {
             TextButton(onClick = onDismissRequest) {
                 Text(text = "Cancel")
             }
@@ -238,4 +256,14 @@ fun ScheduleBottomSheet(
         }
 
     }
+}
+
+
+@Preview
+@Composable
+fun PreviewScheduleBottomSheet(){
+    ScheduleBottomSheet(
+        onDismissRequest = {},
+        onCreateClass = {}
+    )
 }
