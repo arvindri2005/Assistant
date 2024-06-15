@@ -8,7 +8,7 @@
         <item>End Time</item>
     </string-array>
 
-    <string name="attendance_status_setter_info">Set Attendance Status for %1$s from %2$s to %3$s%4$s %5$s</string>
+    <string name="attendance_status_setter_info">Set Attendance Status for %1$s</string>
     <string name="attendance_status_setter_info_extra_class">(Extra class)</string>
     <string name="attendance_status_setter_info_on_date">&#32;on %1$s</string>
 

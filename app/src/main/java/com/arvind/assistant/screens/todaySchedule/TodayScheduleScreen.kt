@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -51,9 +52,12 @@ import com.arvind.assistant.R
 import com.arvind.assistant.db.AttendanceCounts
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
+import com.arvind.assistant.screens.todaySchedule.components.SetClassStatusSheet
 import com.arvind.assistant.screens.todaySchedule.components.TodayScheduleListItem
 import com.arvind.assistant.utils.dateFormatter
 import com.arvind.assistant.utils.timeFormatter
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
 fun TodayScheduleScreen(
@@ -104,180 +108,62 @@ fun TodayScheduleScreen(
             setClasStatus = { onSetClassStatus(setClassSheetItem!!, it) }
         )
     }
-
 }
 
+@Preview
 @Composable
-fun SetClassStatusSheet(
-    todayCourseItem: AttendanceRecordHybrid,
-    onDismissRequest: () -> Unit,
-    setClasStatus: (CourseClassStatus) -> Unit,
-    onDeleteItem: (() -> Unit)? = null
-) {
-    var newStatus by remember {
-        mutableStateOf(todayCourseItem.classStatus)
-    }
-    BaseDialog(
-        onDismissRequest = onDismissRequest,
-        dialogPadding = PaddingValues(0.dp)
-    ) {
-        Text(
-            text = stringResource(
-                id = R.string.attendance_status_setter_info,
-                todayCourseItem.courseName,
-                todayCourseItem.startTime.format(timeFormatter),
-                todayCourseItem.endTime.format(timeFormatter),
-                if (todayCourseItem is AttendanceRecordHybrid.ExtraClass)
-                    stringResource(R.string.attendance_status_setter_info_extra_class)
-                else "",
-                stringResource(
-                    R.string.attendance_status_setter_info_on_date,
-                    todayCourseItem.date.format(dateFormatter)
-                )
-            ),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        ClassStatusOptions(newStatus) { newStatus = it }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            if (onDeleteItem != null) {
-                TextButton(
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    ),
-                    onClick = {
-                        onDeleteItem()
-                        onDismissRequest()
-                    }
-                ) {
-                    Text(text = "Delete Record")
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = onDismissRequest) {
-                Text(text = "Cancel")
-            }
-            TextButton(onClick = {
-                setClasStatus(newStatus)
-                onDismissRequest()
-            }) {
-                Text(text = "ok")
-            }
-        }
-    }
-}
+fun TodayScheduleScreenPreview() {
+    TodayScheduleScreen(
+        todaySchedule = listOf(
+            AttendanceRecordHybrid.ScheduledClass(
+                courseId = 2,
+                scheduleId = 2,
+                attendanceId = 2,
+                courseName = "Science",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 0),
+                date = LocalDate.now(),
+                classStatus = CourseClassStatus.Absent
+            ) to AttendanceCounts(1.0, 0, 1, 1, 1, 75.0),
+            AttendanceRecordHybrid.ExtraClass(
+                courseId = 2,
+                extraClassId = 2,
+                courseName = "Science",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 0),
+                date = LocalDate.now(),
+                classStatus = CourseClassStatus.Absent
+            ) to AttendanceCounts(1.0, 0, 1, 1, 1, 75.0),
+            AttendanceRecordHybrid.ExtraClass(
+                courseId = 2,
+                extraClassId = 2,
+                courseName = "Science",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 0),
+                date = LocalDate.now(),
+                classStatus = CourseClassStatus.Absent
+            ) to AttendanceCounts(1.0, 0, 1, 1, 1, 75.0),
 
-@Composable
-fun BaseDialog(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    properties: DialogProperties = DialogProperties(
-        dismissOnClickOutside = true,
-        usePlatformDefaultWidth = false
-    ),
-    onDismissRequest: () -> Unit,
-    dialogPadding: PaddingValues = BaseDialogDefaults.dialogMargins,
-    contentPadding: PaddingValues = BaseDialogDefaults.contentPadding,
-    minWidth: Dp = 280.dp,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = properties,
-    ) {
-        (LocalView.current.parent as? DialogWindowProvider)?.window?.run {
-            setDimAmount(BaseDialogDefaults.dimAmount)
-            setGravity(Gravity.BOTTOM)
-        }
-        Box(
-            modifier = modifier
-                .widthIn(min = minWidth)
-                .padding(dialogPadding)
-                .semantics { paneTitle = "Dialog" }
-        ) {
-            Column(
-                modifier = Modifier
-                    .clip(BaseDialogDefaults.shape)
-                    .shadow(elevation = BaseDialogDefaults.elevation)
-                    .background(
-                        color = backgroundColor,
-                        shape = BaseDialogDefaults.shape
-                    )
-                    .padding(contentPadding),
-            ) {
-                CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
-                    content()
-                }
-            }
-        }
-    }
-}
+            AttendanceRecordHybrid.ExtraClass(
+                courseId = 2,
+                extraClassId = 2,
+                courseName = "Science",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 0),
+                date = LocalDate.now(),
+                classStatus = CourseClassStatus.Absent
+            ) to AttendanceCounts(1.0, 0, 1, 1, 1, 75.0),
 
-@Composable
-fun ClassStatusOptions(
-    initialStatus: CourseClassStatus,
-    setClassStatus: (CourseClassStatus) -> Unit
-) {
-    Column(Modifier.selectableGroup()) {
-        CourseClassStatus.entries.forEach { dayOfWeek ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .selectable(
-                        selected = (dayOfWeek == initialStatus),
-                        onClick = { setClassStatus(dayOfWeek) },
-                        role = Role.RadioButton
-                    )
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = (dayOfWeek == initialStatus),
-                    onClick = null // null recommended for accessibility with screenreaders
-                )
-                Text(
-                    text = stringResource(
-                        id = when (dayOfWeek) {
-                            CourseClassStatus.Present -> R.string.present
-                            CourseClassStatus.Absent -> R.string.absent
-                            CourseClassStatus.Cancelled -> R.string.cancelled
-                            CourseClassStatus.Unset -> R.string.not_set
-                        }
-                    ),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-        }
-    }
-}
-
-object BaseDialogDefaults {
-
-    val contentPadding = PaddingValues(
-        all = 24.dp
+            AttendanceRecordHybrid.ExtraClass(
+                courseId = 2,
+                extraClassId = 2,
+                courseName = "Science",
+                startTime = LocalTime.of(10, 0),
+                endTime = LocalTime.of(11, 0),
+                date = LocalDate.now(),
+                classStatus = CourseClassStatus.Absent
+            ) to AttendanceCounts(1.0, 0, 1, 1, 1, 75.0),
+        ),
+        onSetClassStatus = { _, _ -> }
     )
-
-    val contentPaddingAlternative = PaddingValues(
-        vertical = 24.dp, horizontal = 8.dp
-    )
-
-    val dialogMargins = PaddingValues(
-        bottom = 12.dp,
-        start = 12.dp,
-        end = 12.dp
-    )
-
-    val shape = RoundedCornerShape(
-        size = 26.dp
-    )
-
-    const val dimAmount = 0.65F
-
-    val elevation = 1.dp
-
-    const val animDuration = 150
-
 }
