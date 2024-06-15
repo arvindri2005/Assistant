@@ -22,18 +22,17 @@ fun AssistantButton(
 ){
     Button(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(5.dp),
-        shape = RoundedCornerShape(8.dp),
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF0c134f)
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         )
     ) {
         Text(
             text = text,
             style = TextStyle(
-                color = Color(0xFFffffff)
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         )
     }
