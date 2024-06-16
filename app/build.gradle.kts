@@ -93,5 +93,7 @@ dependencies {
 
     implementation(libs.accompanist.permissions)
 
+    implementation (libs.androidx.datastore.preferences)
+
 
 }
