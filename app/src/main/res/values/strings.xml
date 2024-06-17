@@ -16,4 +16,7 @@
     <string name="absent">Absent</string>
     <string name="cancelled">Cancelled</string>
     <string name="not_set">Not Set</string>
+
+    <string name="event_time_at">%1$s - %2$s at %3$s</string>
+    <string name="event_time">%1$s - %2$s</string>
 </resources>

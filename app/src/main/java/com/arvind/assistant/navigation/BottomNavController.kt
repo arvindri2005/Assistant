@@ -13,6 +13,7 @@ import com.arvind.assistant.SearchScreen
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
 import com.arvind.assistant.db.DBOps
+import com.arvind.assistant.screens.calendar.CalendarScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
 
 @Composable
@@ -58,7 +59,7 @@ fun BottomNavController(navController: NavHostController) {
             )
         }
         composable("Search"){
-            SearchScreen()
+            CalendarScreen()
         }
         composable("Profile"){
 //            ProfileScreen()
