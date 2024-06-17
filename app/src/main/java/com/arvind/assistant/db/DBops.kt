@@ -4,6 +4,7 @@ import android.content.Context
 import app.cash.sqldelight.EnumColumnAdapter
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.arvind.assistant.Attendance
@@ -101,6 +102,25 @@ class DBOps(
         ).asFlow().mapToList(Dispatchers.IO)
     }
 
+    fun getCourseDetailsWithId(id: String): Flow<CourseDetails>{
+        return queries.getCoursesDetailsWithId(
+            courseId = id.toLong(),
+            mapper = { courseId, courseName, requiredAttendance, _, presents, absents, cancels, unsets ->
+                CourseDetails(
+                    courseId = courseId,
+                    courseName = courseName,
+                    requiredAttendance = requiredAttendance,
+                    currentAttendancePercentage = if (presents + absents == 0L) 100.0 else (presents.toDouble() / (presents + absents)) * 100,
+                    presents = presents.toInt(),
+                    absents = absents.toInt(),
+                    cancels = cancels.toInt(),
+                    unsets = unsets.toInt()
+                )
+            }
+        ).asFlow().mapToOne(Dispatchers.IO)
+
+    }
+
 
     fun getScheduleAndExtraClassesForToday():Flow<List<Pair<AttendanceRecordHybrid, AttendanceCounts>>>{
         val scheduleClassesFlow: Flow<List<AttendanceRecordHybrid>> = queries.getCourseListForToday(
@@ -164,6 +184,13 @@ class DBOps(
     ) = queries.updateExtraClassStatus(extraClassId = extraClassId, status = status)
 
 
+    fun getScheduledClassesForCourse(courseId: Long): Flow<List<ClassScheduleDetails>>{
+        return queries.getClassScheduleForCourse(
+            courseId,
+            mapper = { scheduleId, _, weekday, startTime, endTime, includedInSchedule ->
+                ClassScheduleDetails(weekday, startTime, endTime, scheduleId, includedInSchedule == 1L)
+            }).asFlow().mapToList(Dispatchers.IO)
+    }
 
     companion object {
         val instance: DBOps by lazy {
