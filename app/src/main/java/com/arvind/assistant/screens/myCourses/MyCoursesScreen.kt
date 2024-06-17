@@ -1,4 +1,4 @@
-package com.arvind.assistant
+package com.arvind.assistant.screens.myCourses
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arvind.assistant.db.CourseDetails
+import com.arvind.assistant.screens.myCourses.components.MyCoursesListItem
 
 @Composable
 fun MyCoursesScreen(
@@ -31,12 +32,10 @@ fun MyCoursesScreen(
             Spacer(modifier = Modifier.height(8.dp))
         }
         items(courses){
-            Column {
-                Text(text = it.courseName)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = it.requiredAttendance.toString())
-
-            }
+            MyCoursesListItem(
+                course = it,
+                onClick = {}
+            )
         }
         item{
             Spacer (
