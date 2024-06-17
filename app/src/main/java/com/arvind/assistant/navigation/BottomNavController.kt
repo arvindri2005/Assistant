@@ -91,7 +91,20 @@ fun BottomNavController(navController: NavHostController) {
 
         composable("courseDetails/{courseId}"){backStackEntry ->
             val courseId = backStackEntry.arguments?.getString("courseId")
-            CourseDetailsScreen(courseId = courseId)
+
+            CompositionLocalProvider(
+                androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
+            ) {
+                val classes = dbOps.getScheduledClassesForCourse(courseId!!.toLong())
+                    .collectAsStateWithLifecycle(initialValue = listOf()).value
+                val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
+                if (course != null) {
+                    CourseDetailsScreen(
+                        course = course,
+                        classes = classes
+                    )
+                }
+            }
         }
 
         composable("CreateCourse"){

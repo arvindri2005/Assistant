@@ -115,3 +115,25 @@ SELECT
                 + (SELECT COUNT(*) AS presents FROM ExtraClasses WHERE courseId = Course.courseId AND classStatus = 'Unset')) AS nUnsets
 FROM
     Course;
+
+
+getCoursesDetailsWithId:
+SELECT
+    Course.courseId,
+    Course.courseName,
+    Course.requiredAttendance,
+    (SELECT COUNT(*) FROM CourseSchedule WHERE CourseSchedule.courseId = Course.courseId AND CourseSchedule.weekDay = strftime('%w', 'now')) AS numClassesToday,
+    ((SELECT COUNT(*) AS presents FROM Attendance WHERE scheduleId IN (SELECT scheduleId FROM CourseSchedule WHERE courseId = Course.courseId) AND classStatus = 'Present')
+        + (SELECT COUNT(*) AS presents FROM ExtraClasses WHERE courseId = Course.courseId AND classStatus = 'Present')) AS nPresents,
+    ((SELECT COUNT(*) AS presents FROM Attendance WHERE scheduleId IN (SELECT scheduleId FROM CourseSchedule WHERE courseId = Course.courseId) AND classStatus = 'Absent')
+        + (SELECT COUNT(*) AS presents FROM ExtraClasses WHERE courseId = Course.courseId AND classStatus = 'Absent')) AS nAbsents,
+    ((SELECT COUNT(*) AS presents FROM Attendance WHERE scheduleId IN (SELECT scheduleId FROM CourseSchedule WHERE courseId = Course.courseId) AND classStatus = 'Cancelled')
+        + (SELECT COUNT(*) AS presents FROM ExtraClasses WHERE courseId = Course.courseId AND classStatus = 'Cancelled')) AS nCancels,
+    ((SELECT COUNT(*) AS presents FROM Attendance WHERE scheduleId IN (SELECT scheduleId FROM CourseSchedule WHERE courseId = Course.courseId) AND classStatus = 'Unset')
+            + (SELECT COUNT(*) AS presents FROM ExtraClasses WHERE courseId = Course.courseId AND classStatus = 'Unset')) AS nUnsets
+FROM
+    Course
+WHERE Course.courseId = ?;
+
+getClassScheduleForCourse:
+SELECT * FROM CourseSchedule WHERE CourseSchedule.courseId = ? ORDER BY CourseSchedule.includeInSchedule, CourseSchedule.weekDay, CourseSchedule.startTime;
