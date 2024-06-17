@@ -14,14 +14,14 @@ import com.arvind.assistant.useCases.settings.GetSettingsUseCase
 import com.arvind.assistant.utils.Constants
 import com.arvind.assistant.utils.monthName
 import com.arvind.assistant.utils.toIntList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-
-
-
-class CalendarViewModel(
+@HiltViewModel
+class CalendarViewModel @Inject constructor(
     private val getAllEventsUseCase: GetAllEventsUseCase,
     private val getAllCalendarsUseCase: GetAllCalendarsUseCase,
     private val getSettings: GetSettingsUseCase

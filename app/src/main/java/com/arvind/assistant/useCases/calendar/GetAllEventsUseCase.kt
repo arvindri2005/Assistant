@@ -3,8 +3,9 @@ package com.arvind.assistant.useCases.calendar
 import com.arvind.assistant.domain.model.CalendarEvent
 import com.arvind.assistant.domain.repository.CalendarRepository
 import com.arvind.assistant.utils.formatDateForMapping
+import javax.inject.Inject
 
-class GetAllEventsUseCase (
+class GetAllEventsUseCase @Inject constructor(
     private val calendarRepository: CalendarRepository
 ) {
     suspend operator fun invoke(excluded: List<Int>, fromWidget: Boolean = false): Map<String, List<CalendarEvent>> {

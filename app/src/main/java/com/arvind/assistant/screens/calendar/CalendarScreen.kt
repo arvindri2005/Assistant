@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.arvind.assistant.screens.calendar.components.CalendarEventItem
 import com.arvind.assistant.screens.calendar.components.NoReadCalendarPermissionMessage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -30,9 +28,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CalendarScreen(){
+fun CalendarScreen(
 
-    val viewModel = viewModel<CalendarViewModel>()
+    viewModel: CalendarViewModel = hiltViewModel()
+){
+
     val state = viewModel.uiState
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()

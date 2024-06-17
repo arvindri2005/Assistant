@@ -26,7 +26,9 @@ import com.arvind.assistant.navigation.BottomNavController
 import com.arvind.assistant.screens.calendar.CalendarScreen
 import com.arvind.assistant.screens.createCourse.CreateCourseScreen
 import com.arvind.assistant.ui.theme.AssistantTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
