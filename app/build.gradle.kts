@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-parcelize")
     id("app.cash.sqldelight")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 sqldelight {
@@ -95,5 +97,12 @@ dependencies {
 
     implementation (libs.androidx.datastore.preferences)
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
