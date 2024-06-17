@@ -84,11 +84,18 @@ class DBOps(
 
     fun getAllCourses(): Flow<List<CourseDetails>>{
         return queries.getAllCourses(
-            mapper = { courseId, courseName, requiredAttendance ->
+            mapper = { courseId, courseName, requiredAttendance, _, presents, absents, cancels, unsets ->
+
+
                 CourseDetails(
                     courseId = courseId,
                     courseName = courseName,
-                    requiredAttendance = requiredAttendance
+                    requiredAttendance = requiredAttendance,
+                    currentAttendancePercentage = if (presents + absents == 0L) 100.0 else (presents.toDouble() / (presents + absents)) * 100,
+                    presents = presents.toInt(),
+                    absents = absents.toInt(),
+                    cancels = cancels.toInt(),
+                    unsets = unsets.toInt()
                 )
             }
         ).asFlow().mapToList(Dispatchers.IO)

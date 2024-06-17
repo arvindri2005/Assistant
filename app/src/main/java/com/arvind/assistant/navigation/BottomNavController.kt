@@ -8,8 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.arvind.assistant.screens.createCourse.CreateCourseScreen
-import com.arvind.assistant.MyCoursesScreen
-import com.arvind.assistant.SearchScreen
+import com.arvind.assistant.screens.myCourses.MyCoursesScreen
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
 import com.arvind.assistant.db.DBOps
