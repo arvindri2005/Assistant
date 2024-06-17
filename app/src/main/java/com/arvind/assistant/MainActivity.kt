@@ -34,12 +34,71 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
-//            CalendarScreen()
-            CalendarScreen()
-
-
+            AssistantTheme{
+                val selectedItemIndex = rememberSaveable {
+                    mutableIntStateOf(0)
+                }
+                val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NavigationBar {
+                            items.forEachIndexed { index, bottomNavigationItem ->
+                                NavigationBarItem(
+                                    selected = currentDestination?.hierarchy?.any { it.route == bottomNavigationItem.title } == true,
+                                    onClick = {
+                                        selectedItemIndex.intValue = index
+                                        navController.navigate(bottomNavigationItem.title){
+                                            popUpTo(navController.graph.startDestinationId){
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                    label = {
+                                        Text(
+                                            text = bottomNavigationItem.title
+                                        )
+                                    },
+                                    icon = {
+                                        BadgedBox(
+                                            badge ={
+                                                if(bottomNavigationItem.badgeCount!=null){
+                                                    Text(
+                                                        text = bottomNavigationItem.badgeCount.toString()
+                                                    )
+                                                } else if(bottomNavigationItem.hasNews){
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = if(index == selectedItemIndex.intValue){
+                                                    bottomNavigationItem.selectedIcon
+                                                }else{
+                                                    bottomNavigationItem.unSelectedIcon
+                                                },
+                                                contentDescription = bottomNavigationItem.title
+                                            )
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+                ) { innerPadding ->
+                    Surface(
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        BottomNavController(navController =navController)
+                    }
+                }
+            }
         }
     }
 }
