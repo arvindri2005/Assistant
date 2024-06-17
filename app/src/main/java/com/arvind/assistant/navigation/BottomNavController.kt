@@ -1,5 +1,6 @@
 package com.arvind.assistant.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -13,6 +14,7 @@ import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
 import com.arvind.assistant.db.DBOps
 import com.arvind.assistant.screens.calendar.CalendarScreen
+import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
 
 @Composable
@@ -80,10 +82,18 @@ fun BottomNavController(navController: NavHostController) {
                 MyCoursesScreen(
                     courses = dbOps.getAllCourses()
                         .collectAsStateWithLifecycle(initialValue = listOf()).value,
-                )
+                ){courseId ->
+                    navController.navigate("courseDetails/$courseId")
+                }
             }
 
         }
+
+        composable("courseDetails/{courseId}"){backStackEntry ->
+            val courseId = backStackEntry.arguments?.getString("courseId")
+            CourseDetailsScreen(courseId = courseId)
+        }
+
         composable("CreateCourse"){
 //            CreateCourseScreen(
 //                createCourse = { courseName, requiredAttendance ->
@@ -97,7 +107,9 @@ fun BottomNavController(navController: NavHostController) {
             MyCoursesScreen(
                 courses = dbOps.getAllCourses()
                     .collectAsStateWithLifecycle(initialValue = listOf()).value,
-            )
+            ){
+
+            }
         }
 
         composable("todaySchedule"){

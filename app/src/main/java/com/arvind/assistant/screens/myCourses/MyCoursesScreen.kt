@@ -17,7 +17,8 @@ import com.arvind.assistant.screens.myCourses.components.MyCoursesListItem
 
 @Composable
 fun MyCoursesScreen(
-    courses: List<CourseDetails>
+    courses: List<CourseDetails>,
+    goToCourseDetails: (courseId: Long) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -34,7 +35,9 @@ fun MyCoursesScreen(
         items(courses){
             MyCoursesListItem(
                 course = it,
-                onClick = {}
+                onClick = {
+                    goToCourseDetails(it.courseId)
+                }
             )
         }
         item{
