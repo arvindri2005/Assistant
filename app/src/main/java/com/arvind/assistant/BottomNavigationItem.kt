@@ -1,10 +1,16 @@
 package com.arvind.assistant
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
@@ -14,29 +20,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 val items  = listOf(
     BottomNavigationItem(
-        title = "Home",
-        selectedIcon = Icons.Filled.Home,
-        unSelectedIcon = Icons.Outlined.Home,
-        hasNews = true,
-        badgeCount = 10
-    ),
-    BottomNavigationItem(
-        title = "Search",
-        selectedIcon = Icons.Filled.Search,
-        unSelectedIcon = Icons.Outlined.Search,
+        title = "Add",
+        selectedIcon = Icons.Filled.Add,
+        unSelectedIcon = Icons.Outlined.Add,
         hasNews = false
     ),
     BottomNavigationItem(
-        title = "Profile",
-        selectedIcon = Icons.Filled.Person,
-        unSelectedIcon = Icons.Outlined.Person,
+        title = "Calendar",
+        selectedIcon = Icons.Filled.DateRange,
+        unSelectedIcon = Icons.Outlined.DateRange,
         hasNews = false
     ),
     BottomNavigationItem(
-        title = "Settings",
+        title = "Today",
         selectedIcon = Icons.Filled.Settings,
         unSelectedIcon = Icons.Outlined.Settings,
-        hasNews = true
+        hasNews = false
+    ),
+    BottomNavigationItem(
+        title = "Courses",
+        selectedIcon = Icons.Filled.AccountCircle,
+        unSelectedIcon = Icons.Outlined.AccountCircle,
+        hasNews = false
     )
 )
 

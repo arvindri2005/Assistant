@@ -46,12 +46,9 @@ fun BottomNavController(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = "Home"
+        startDestination = "Add"
     ){
-        composable("Home"){
-//            HomeScreen {
-//                navController.navigate("CreateCourse")
-//            }
+        composable("Add"){
             CreateCourseScreen(
                 createCourse = { courseName, requiredAttendance, scheduleClasses ->
                     dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
@@ -59,11 +56,10 @@ fun BottomNavController(navController: NavHostController) {
                 }
             )
         }
-        composable("Search"){
+        composable("Calendar"){
             CalendarScreen()
         }
-        composable("Profile"){
-//            ProfileScreen()
+        composable("Today"){
             CompositionLocalProvider(
                 androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
             ) {
@@ -75,7 +71,7 @@ fun BottomNavController(navController: NavHostController) {
             }
 
         }
-        composable("Settings") {
+        composable("Courses") {
             CompositionLocalProvider(
                 androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
             ) {
