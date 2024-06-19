@@ -1,5 +1,6 @@
 package com.arvind.assistant.screens.courseDetails
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,10 +29,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -48,7 +52,8 @@ import java.time.LocalTime
 @Composable
 fun CourseDetailsScreen(
     course: CourseDetails,
-    classes: List<ClassScheduleDetails>
+    classes: List<ClassScheduleDetails>,
+    scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit
 ) {
     val showTip = remember{
         mutableStateOf(false)
@@ -56,6 +61,12 @@ fun CourseDetailsScreen(
     val showScheduleOptions = remember {
         mutableStateOf(false)
     }
+
+    var scheduleItemToBeDeleted: ClassScheduleDetails?  by remember {
+        mutableStateOf(null)
+    }
+
+
     Scaffold(
 
         topBar = {
@@ -227,7 +238,7 @@ fun CourseDetailsScreen(
                                         Text(text = "Delete Schedule")
                                     },
                                     onClick = {
-
+                                        scheduleItemToBeDeleted = classDetail
                                     }
                                 )
 
@@ -235,10 +246,11 @@ fun CourseDetailsScreen(
                         }
                     }
                 }
-
-
             }
-
+            if(scheduleItemToBeDeleted != null){
+                scheduleToBeDeleted(scheduleItemToBeDeleted!!)
+                scheduleItemToBeDeleted = null
+            }
         }
     }
 }
@@ -259,8 +271,10 @@ fun CourseDetailsScreenPreview() {
                 startTime = LocalTime.now(),
                 endTime = LocalTime.now().plusHours(1),
                 scheduleId = 1L,
-
             )
-        )
+        ),
+        scheduleToBeDeleted = {
+
+        }
     )
 }
