@@ -1,4 +1,4 @@
-package com.arvind.assistant.screens.createCourse.components
+package com.arvind.assistant.components
 
 import android.text.format.DateFormat
 import android.widget.Toast
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -48,7 +47,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import com.arvind.assistant.R
 import com.arvind.assistant.db.ClassScheduleDetails
 import kotlinx.coroutines.launch

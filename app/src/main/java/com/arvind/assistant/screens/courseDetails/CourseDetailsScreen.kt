@@ -1,6 +1,5 @@
 package com.arvind.assistant.screens.courseDetails
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,12 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.arvind.assistant.components.AssistantButton
 import com.arvind.assistant.components.AssistantFAB
+import com.arvind.assistant.components.ScheduleBottomSheet
 import com.arvind.assistant.db.ClassScheduleDetails
 import com.arvind.assistant.db.CourseDetails
 import com.arvind.assistant.screens.courseDetails.components.CourseClassesStatus
@@ -53,12 +52,17 @@ import java.time.LocalTime
 fun CourseDetailsScreen(
     course: CourseDetails,
     classes: List<ClassScheduleDetails>,
-    scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit
+    scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit,
+    onAddScheduleClass: (schedule: ClassScheduleDetails) -> Unit
 ) {
     val showTip = remember{
         mutableStateOf(false)
     }
     val showScheduleOptions = remember {
+        mutableStateOf(false)
+    }
+
+    val showScheduleBottomSheet = remember {
         mutableStateOf(false)
     }
 
@@ -102,7 +106,9 @@ fun CourseDetailsScreen(
 
         floatingActionButton = {
             AssistantFAB(
-                onClick = {  },
+                onClick = {
+                    showScheduleBottomSheet.value = true
+                },
                 icon = Icons.Filled.Add,
                 text = "Add Schedule Classes"
             )
@@ -247,6 +253,16 @@ fun CourseDetailsScreen(
                     }
                 }
             }
+
+            if(showScheduleBottomSheet.value){
+                ScheduleBottomSheet(
+                    onDismissRequest = { showScheduleBottomSheet.value = false },
+                    onCreateClass = { classScheduleDetails ->
+                        onAddScheduleClass(classScheduleDetails)
+                    }
+                )
+            }
+
             if(scheduleItemToBeDeleted != null){
                 scheduleToBeDeleted(scheduleItemToBeDeleted!!)
                 scheduleItemToBeDeleted = null
@@ -274,6 +290,9 @@ fun CourseDetailsScreenPreview() {
             )
         ),
         scheduleToBeDeleted = {
+
+        },
+        onAddScheduleClass = {
 
         }
     )

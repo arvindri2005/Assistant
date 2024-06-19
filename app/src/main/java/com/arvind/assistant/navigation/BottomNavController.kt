@@ -100,7 +100,14 @@ fun BottomNavController(navController: NavHostController) {
                         classes = classes,
                         scheduleToBeDeleted = {schedule->
                             dbOps.deleteSchedule(schedule.scheduleId!!)
+                        },
+                        onAddScheduleClass = { schedule ->
+                            dbOps.addScheduleClass(
+                                courseId = course.courseId,
+                                schedule = schedule
+                            )
                         }
+
                     )
                 }
             }
