@@ -192,6 +192,21 @@ class DBOps(
             }).asFlow().mapToList(Dispatchers.IO)
     }
 
+    fun deleteSchedule(scheduleId: Long) = queries.deleteScheduleWithScheduleId(scheduleId)
+
+    fun addScheduleClass(
+        courseId: Long,
+        schedule: ClassScheduleDetails
+    ){
+        queries.createCourseScheduleForCourse(
+            courseId = courseId,
+            weekDay = schedule.dayOfWeek,
+            startTime = schedule.startTime,
+            endTime = schedule.endTime,
+            includeInSchedule = 1
+        )
+    }
+
     companion object {
         val instance: DBOps by lazy {
             DBOps(getAndroidSqliteDriver(applicationContextGlobal))

@@ -137,3 +137,6 @@ WHERE Course.courseId = ?;
 
 getClassScheduleForCourse:
 SELECT * FROM CourseSchedule WHERE CourseSchedule.courseId = ? ORDER BY CourseSchedule.includeInSchedule, CourseSchedule.weekDay, CourseSchedule.startTime;
+
+deleteScheduleWithScheduleId:
+DELETE FROM CourseSchedule WHERE CourseSchedule.scheduleId = ?;

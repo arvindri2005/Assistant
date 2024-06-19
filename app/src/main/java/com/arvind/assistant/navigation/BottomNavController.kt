@@ -97,7 +97,17 @@ fun BottomNavController(navController: NavHostController) {
                 if (course != null) {
                     CourseDetailsScreen(
                         course = course,
-                        classes = classes
+                        classes = classes,
+                        scheduleToBeDeleted = {schedule->
+                            dbOps.deleteSchedule(schedule.scheduleId!!)
+                        },
+                        onAddScheduleClass = { schedule ->
+                            dbOps.addScheduleClass(
+                                courseId = course.courseId,
+                                schedule = schedule
+                            )
+                        }
+
                     )
                 }
             }

@@ -28,8 +28,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.arvind.assistant.components.AssistantButton
 import com.arvind.assistant.components.AssistantFAB
+import com.arvind.assistant.components.ScheduleBottomSheet
 import com.arvind.assistant.db.ClassScheduleDetails
 import com.arvind.assistant.db.CourseDetails
 import com.arvind.assistant.screens.courseDetails.components.CourseClassesStatus
@@ -48,7 +51,9 @@ import java.time.LocalTime
 @Composable
 fun CourseDetailsScreen(
     course: CourseDetails,
-    classes: List<ClassScheduleDetails>
+    classes: List<ClassScheduleDetails>,
+    scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit,
+    onAddScheduleClass: (schedule: ClassScheduleDetails) -> Unit
 ) {
     val showTip = remember{
         mutableStateOf(false)
@@ -56,6 +61,16 @@ fun CourseDetailsScreen(
     val showScheduleOptions = remember {
         mutableStateOf(false)
     }
+
+    val showScheduleBottomSheet = remember {
+        mutableStateOf(false)
+    }
+
+    var scheduleItemToBeDeleted: ClassScheduleDetails?  by remember {
+        mutableStateOf(null)
+    }
+
+
     Scaffold(
 
         topBar = {
@@ -91,7 +106,9 @@ fun CourseDetailsScreen(
 
         floatingActionButton = {
             AssistantFAB(
-                onClick = {  },
+                onClick = {
+                    showScheduleBottomSheet.value = true
+                },
                 icon = Icons.Filled.Add,
                 text = "Add Schedule Classes"
             )
@@ -227,7 +244,7 @@ fun CourseDetailsScreen(
                                         Text(text = "Delete Schedule")
                                     },
                                     onClick = {
-
+                                        scheduleItemToBeDeleted = classDetail
                                     }
                                 )
 
@@ -235,10 +252,21 @@ fun CourseDetailsScreen(
                         }
                     }
                 }
-
-
             }
 
+            if(showScheduleBottomSheet.value){
+                ScheduleBottomSheet(
+                    onDismissRequest = { showScheduleBottomSheet.value = false },
+                    onCreateClass = { classScheduleDetails ->
+                        onAddScheduleClass(classScheduleDetails)
+                    }
+                )
+            }
+
+            if(scheduleItemToBeDeleted != null){
+                scheduleToBeDeleted(scheduleItemToBeDeleted!!)
+                scheduleItemToBeDeleted = null
+            }
         }
     }
 }
@@ -259,8 +287,13 @@ fun CourseDetailsScreenPreview() {
                 startTime = LocalTime.now(),
                 endTime = LocalTime.now().plusHours(1),
                 scheduleId = 1L,
-
             )
-        )
+        ),
+        scheduleToBeDeleted = {
+
+        },
+        onAddScheduleClass = {
+
+        }
     )
 }
