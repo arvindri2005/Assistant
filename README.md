@@ -9,7 +9,7 @@ Welcome to the College Student Assistant Android App repository! This app is des
 - **Notes**: Create and organize notes for different subjects. 🔳
 - **Notifications**: Set reminders for classes, assignments, and exams. 🔳
 - **GPA Calculator**: Calculate your GPA based on your grades. 🔳
-- **Events**: Manage extracurricular activities and events. 🔳
+- **Events**: Manage extracurricular activities and events. 🟨
 - **User Authentication**: Secure login and registration system. 🔳
 - **Offline Mode**: Access your information even when offline. 🔳
 
