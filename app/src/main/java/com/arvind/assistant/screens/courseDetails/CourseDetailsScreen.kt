@@ -42,7 +42,9 @@ import com.arvind.assistant.components.AssistantFAB
 import com.arvind.assistant.components.ScheduleBottomSheet
 import com.arvind.assistant.db.ClassScheduleDetails
 import com.arvind.assistant.db.CourseDetails
+import com.arvind.assistant.db.ExtraClassTimings
 import com.arvind.assistant.screens.courseDetails.components.CourseClassesStatus
+import com.arvind.assistant.screens.courseDetails.components.ExtraClassBottomSheet
 import com.arvind.assistant.screens.createCourse.components.ScheduleClassListItem
 import java.time.LocalDate
 import java.time.LocalTime
@@ -53,7 +55,9 @@ fun CourseDetailsScreen(
     course: CourseDetails,
     classes: List<ClassScheduleDetails>,
     scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit,
-    onAddScheduleClass: (schedule: ClassScheduleDetails) -> Unit
+    onAddScheduleClass: (schedule: ClassScheduleDetails) -> Unit,
+    goToAttendanceRecordScreen: () -> Unit,
+    onExtraClassCreated: (extraClassTimings: ExtraClassTimings) -> Unit
 ) {
     val showTip = remember{
         mutableStateOf(false)
@@ -63,6 +67,10 @@ fun CourseDetailsScreen(
     }
 
     val showScheduleBottomSheet = remember {
+        mutableStateOf(false)
+    }
+
+    val showExtraClassBottomSheet = remember {
         mutableStateOf(false)
     }
 
@@ -149,14 +157,14 @@ fun CourseDetailsScreen(
                         modifier = Modifier
                             .weight(1f)
                     ) {
-
+                        goToAttendanceRecordScreen()
                     }
                     AssistantButton(
                         text = "Create extra class",
                         modifier = Modifier
                             .weight(1f)
                     ) {
-
+                        showExtraClassBottomSheet.value = true
                     }
                 }
 
@@ -267,6 +275,19 @@ fun CourseDetailsScreen(
                 scheduleToBeDeleted(scheduleItemToBeDeleted!!)
                 scheduleItemToBeDeleted = null
             }
+
+            if(showExtraClassBottomSheet.value){
+                ExtraClassBottomSheet(
+                    courseName = course.courseName,
+                    onDismissRequest = {
+                        showExtraClassBottomSheet.value = false
+                    },
+                    onCreateExtraClass = { extraClassTimings ->
+                        onExtraClassCreated(extraClassTimings)
+                    }
+                )
+
+            }
         }
     }
 }
@@ -293,6 +314,12 @@ fun CourseDetailsScreenPreview() {
 
         },
         onAddScheduleClass = {
+
+        },
+        goToAttendanceRecordScreen = {
+
+        },
+        onExtraClassCreated = {
 
         }
     )

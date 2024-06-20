@@ -13,6 +13,7 @@ import com.arvind.assistant.screens.myCourses.MyCoursesScreen
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
 import com.arvind.assistant.db.DBOps
+import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.calendar.CalendarScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
@@ -106,8 +107,13 @@ fun BottomNavController(navController: NavHostController) {
                                 courseId = course.courseId,
                                 schedule = schedule
                             )
+                        },
+                        goToAttendanceRecordScreen = {
+                            navController.navigate("attendanceRecord/${course.courseId}")
+                        },
+                        onExtraClassCreated = {extraClassTimings ->
+                            dbOps.createExtraClass(course.courseId, extraClassTimings)
                         }
-
                     )
                 }
             }
@@ -133,6 +139,10 @@ fun BottomNavController(navController: NavHostController) {
 
         composable("todaySchedule"){
 
+        }
+
+        composable("attendanceRecord/{courseId}"){backStackEntry ->
+            AttendanceRecordScreen()
         }
     }
 }

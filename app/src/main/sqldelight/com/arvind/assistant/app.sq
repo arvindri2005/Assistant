@@ -140,3 +140,7 @@ SELECT * FROM CourseSchedule WHERE CourseSchedule.courseId = ? ORDER BY CourseSc
 
 deleteScheduleWithScheduleId:
 DELETE FROM CourseSchedule WHERE CourseSchedule.scheduleId = ?;
+
+createExtraClass:
+INSERT INTO ExtraClasses (courseId, date, startTime, endTime, classStatus)
+VALUES (?, ?, ?, ?, ?);
