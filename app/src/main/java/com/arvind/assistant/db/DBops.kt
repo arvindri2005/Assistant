@@ -11,6 +11,7 @@ import com.arvind.assistant.Attendance
 import com.arvind.assistant.CourseSchedule
 import com.arvind.assistant.Database
 import com.arvind.assistant.ExtraClasses
+import com.arvind.assistant.app.AssistantApplication
 import com.arvind.assistant.applicationContextGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import javax.inject.Inject
 
 
 fun getAndroidSqliteDriver(context: Context) = AndroidSqliteDriver(
@@ -51,7 +53,7 @@ fun getSqliteDB(driver: SqlDriver): Database{
 
     )
 }
-class DBOps(
+class DBOps @Inject constructor(
     driver: SqlDriver,
 ){
     val db by lazy { getSqliteDB(driver) }

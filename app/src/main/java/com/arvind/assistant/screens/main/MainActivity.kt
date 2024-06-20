@@ -8,12 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.arvind.assistant.db.DBOps
 import com.arvind.assistant.navigation.MainNavController
 import com.arvind.assistant.ui.theme.AssistantTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var dbOps: DBOps
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +29,10 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    MainNavController(mainNavHost =navController)
+                    MainNavController(
+                        mainNavHost =navController,
+                        dbOps = dbOps
+                    )
                 }
 
             }

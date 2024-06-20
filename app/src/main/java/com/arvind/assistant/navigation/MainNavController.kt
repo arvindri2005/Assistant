@@ -12,10 +12,14 @@ import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.main.MainScreen
 import com.arvind.assistant.utils.Constants
+import javax.inject.Inject
 
 @Composable
-fun MainNavController(mainNavHost: NavHostController) {
-    val dbOps: DBOps = DBOps.instance
+fun MainNavController(
+    mainNavHost: NavHostController,
+    dbOps: DBOps
+) {
+
 
     NavHost(
         navController = mainNavHost,
