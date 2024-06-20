@@ -17,11 +17,16 @@ import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.calendar.CalendarScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
+import com.arvind.assistant.utils.Constants
 
 @Composable
-fun BottomNavController(navController: NavHostController) {
+fun BottomNavController(
+    bottomNavController: NavHostController,
+    mainNavController: NavHostController,
+    dbOps: DBOps
+) {
 
-    val dbOps: DBOps = DBOps.instance
+
     val onSetClassStatus = remember{
         { item: AttendanceRecordHybrid, status: CourseClassStatus ->
             when (item) {
@@ -46,21 +51,21 @@ fun BottomNavController(navController: NavHostController) {
     }
 
     NavHost(
-        navController = navController,
-        startDestination = "Add"
+        navController = bottomNavController,
+        startDestination = Screen.Add.route
     ){
-        composable("Add"){
+        composable(Screen.Add.route){
             CreateCourseScreen(
                 createCourse = { courseName, requiredAttendance, scheduleClasses ->
                     dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
-                    navController.popBackStack()
+                    bottomNavController.popBackStack()
                 }
             )
         }
-        composable("Calendar"){
+        composable(Screen.Calendar.route){
             CalendarScreen()
         }
-        composable("Today"){
+        composable(Screen.Today.route){
             CompositionLocalProvider(
                 androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
             ) {
@@ -72,7 +77,7 @@ fun BottomNavController(navController: NavHostController) {
             }
 
         }
-        composable("Courses") {
+        composable(Screen.Courses.route) {
             CompositionLocalProvider(
                 androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
             ) {
@@ -80,87 +85,14 @@ fun BottomNavController(navController: NavHostController) {
                     courses = dbOps.getAllCourses()
                         .collectAsStateWithLifecycle(initialValue = listOf()).value,
                 ){courseId ->
-                    navController.navigate("courseDetails/$courseId")
-                }
-            }
-
-        }
-
-        composable("courseDetails/{courseId}"){backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId")
-
-            CompositionLocalProvider(
-                androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
-            ) {
-                val classes = dbOps.getScheduledClassesForCourse(courseId!!.toLong())
-                    .collectAsStateWithLifecycle(initialValue = listOf()).value
-                val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
-                if (course != null) {
-                    CourseDetailsScreen(
-                        course = course,
-                        classes = classes,
-                        scheduleToBeDeleted = {schedule->
-                            dbOps.deleteSchedule(schedule.scheduleId!!)
-                        },
-                        onAddScheduleClass = { schedule ->
-                            dbOps.addScheduleClass(
-                                courseId = course.courseId,
-                                schedule = schedule
-                            )
-                        },
-                        goToAttendanceRecordScreen = {
-                            navController.navigate("attendanceRecord/${course.courseId}")
-                        },
-                        onExtraClassCreated = {extraClassTimings ->
-                            dbOps.createExtraClass(course.courseId, extraClassTimings)
-                        }
+                    mainNavController.navigate(
+                        Screen.CourseDetails.route.replace(
+                            "{${Constants.COURSE_ID_ARG}}",
+                            courseId.toString()
+                        )
                     )
                 }
             }
-        }
-
-        composable("CreateCourse"){
-//            CreateCourseScreen(
-//                createCourse = { courseName, requiredAttendance ->
-//                    dbOps.createCourse(courseName, requiredAttendance)
-//                    navController.popBackStack()
-//                }
-//            )
-        }
-
-        composable("MyCourses"){
-            MyCoursesScreen(
-                courses = dbOps.getAllCourses()
-                    .collectAsStateWithLifecycle(initialValue = listOf()).value,
-            ){
-
-            }
-        }
-
-        composable("todaySchedule"){
-
-        }
-
-        composable("attendanceRecord/{courseId}"){backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId")
-            if(courseId!=null){
-                CompositionLocalProvider(
-                    androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
-                ) {
-                    val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
-                    if(course!=null){
-                        AttendanceRecordScreen(
-                            course = course,
-                            records = dbOps.getAttendanceRecordsForCourse(courseId.toLong())
-                                .collectAsStateWithLifecycle(initialValue = listOf()).value
-                        )
-                    }
-                    else{
-                        Log.d("BottomNavController", "Course is null")
-                    }
-                }
-            }
-
         }
     }
 }
