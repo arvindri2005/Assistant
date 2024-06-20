@@ -144,3 +144,13 @@ DELETE FROM CourseSchedule WHERE CourseSchedule.scheduleId = ?;
 createExtraClass:
 INSERT INTO ExtraClasses (courseId, date, startTime, endTime, classStatus)
 VALUES (?, ?, ?, ?, ?);
+
+
+getAttendanceRecordsForCourse:
+SELECT a.attendanceId AS entityId, a.scheduleId AS scheduleId,  a.date, s.startTime, s.endTime, a.classStatus, 0 AS isExtraCLass, course.courseName, course.courseId
+    FROM Attendance a, CourseSchedule s,  Course course
+    WHERE a.scheduleId = s.scheduleId AND s.courseId = :courseId AND s.courseId = course.courseId
+UNION
+SELECT e.extraClassId AS entityId, NULL AS scheduleId, e.date, e.startTime, e.endTime, e.classStatus, 1 AS isExtraCLass , course.courseName, course.courseId
+    FROM ExtraClasses e, Course course
+    WHERE e.courseId = :courseId AND e.courseId = course.courseId;
