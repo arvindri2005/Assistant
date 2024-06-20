@@ -207,6 +207,17 @@ class DBOps(
         )
     }
 
+    fun createExtraClass(
+        courseId: Long,
+        timings: ExtraClassTimings
+    ) = queries.createExtraClass(
+        courseId,
+        timings.date,
+        timings.startTime,
+        timings.endTime,
+        CourseClassStatus.Unset
+    )
+
     companion object {
         val instance: DBOps by lazy {
             DBOps(getAndroidSqliteDriver(applicationContextGlobal))

@@ -19,4 +19,11 @@
 
     <string name="event_time_at">%1$s - %2$s at %3$s</string>
     <string name="event_time">%1$s - %2$s</string>
+
+
+    <string-array name="add_extra_class_bottom_sheet_tabs">
+        <item>Date</item>
+        <item>Start Time</item>
+        <item>End Time</item>
+    </string-array>
 </resources>
