@@ -8,10 +8,13 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,7 +44,19 @@ fun AssistantTextField(
         onValueChange = onInputChange,
         label = label,
         keyboardOptions = keyboardOptions,
-        shape = RoundedCornerShape(25)
+        shape = RoundedCornerShape(25),
+        colors = OutlinedTextFieldDefaults
+            .colors(
+                focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                unfocusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                focusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                cursorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+
+
+            )
 
     )
 
