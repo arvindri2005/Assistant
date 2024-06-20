@@ -184,6 +184,46 @@ class DBOps(
     ) = queries.updateExtraClassStatus(extraClassId = extraClassId, status = status)
 
 
+    fun getAttendanceRecordsForCourse(courseId: Long): Flow<List<AttendanceRecordHybrid>> {
+        return queries.getAttendanceRecordsForCourse(
+            courseId = courseId,
+            mapper = { entityId,
+                       scheduleId,
+                       date,
+                       startTime,
+                       endTime,
+                       classStatus,
+                       isExtraCLass,
+                       courseName,
+                       _ ->
+                if (isExtraCLass != 0L) {
+                    AttendanceRecordHybrid.ExtraClass(
+                        extraClassId = entityId,
+                        startTime = startTime,
+                        endTime = endTime,
+                        courseName = courseName,
+                        date = date,
+                        classStatus = classStatus,
+                        courseId = courseId
+                    )
+                } else {
+                    AttendanceRecordHybrid.ScheduledClass(
+                        attendanceId = entityId,
+                        scheduleId = scheduleId!!,
+                        startTime = startTime,
+                        endTime = endTime,
+                        courseName = courseName,
+                        date = date,
+                        classStatus = classStatus,
+                        courseId = courseId
+                    )
+                }
+            }
+        )
+            .asFlow().mapToList(Dispatchers.IO)
+    }
+
+
     fun getScheduledClassesForCourse(courseId: Long): Flow<List<ClassScheduleDetails>>{
         return queries.getClassScheduleForCourse(
             courseId,

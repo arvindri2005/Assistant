@@ -142,7 +142,25 @@ fun BottomNavController(navController: NavHostController) {
         }
 
         composable("attendanceRecord/{courseId}"){backStackEntry ->
-            AttendanceRecordScreen()
+            val courseId = backStackEntry.arguments?.getString("courseId")
+            if(courseId!=null){
+                CompositionLocalProvider(
+                    androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
+                ) {
+                    val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
+                    if(course!=null){
+                        AttendanceRecordScreen(
+                            course = course,
+                            records = dbOps.getAttendanceRecordsForCourse(courseId.toLong())
+                                .collectAsStateWithLifecycle(initialValue = listOf()).value
+                        )
+                    }
+                    else{
+                        Log.d("BottomNavController", "Course is null")
+                    }
+                }
+            }
+
         }
     }
 }
