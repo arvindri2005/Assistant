@@ -26,8 +26,8 @@ fun AssistantFAB(
 
     FloatingActionButton(
         onClick = onClick,
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

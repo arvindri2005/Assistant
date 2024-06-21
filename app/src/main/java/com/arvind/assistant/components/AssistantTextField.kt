@@ -51,9 +51,9 @@ fun AssistantTextField(
                 unfocusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 focusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 unfocusedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                cursorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                cursorColor = MaterialTheme.colorScheme.primaryContainer,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
 
 
             )
