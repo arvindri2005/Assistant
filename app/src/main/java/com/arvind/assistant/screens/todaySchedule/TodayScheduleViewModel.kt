@@ -2,7 +2,6 @@ package com.arvind.assistant.screens.todaySchedule
 
 import android.Manifest
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
@@ -10,7 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import com.arvind.assistant.applicationContextGlobal
-import com.arvind.assistant.db.DBOps
+import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.receiver.NotificationReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,33 +21,36 @@ class TodayScheduleViewModel @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
 ): ViewModel() {
 
-    fun showSimpleNotification(courseName: String, courseId: Long){
+    fun showSimpleNotification(course: AttendanceRecordHybrid, courseId: Long){
 
         val intent1 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Present in $courseName")
-            putExtra("courseId", courseId.toString())
+            putExtra("message", "Present in ${course.courseName}")
+            putExtra("courseId", courseId)
+            putExtra("attendId", course)
         }
         val pendingIntent1 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            0,
+            courseId.toInt() * 10,
             intent1,
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent2 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Absent in $courseName")
+            putExtra("message", "Absent in ${course.courseName}")
+            putExtra("courseId", courseId)
         }
         val pendingIntent2 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            1,
+            courseId.toInt() * 10 + 2,
             intent2,
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent3 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Cancel in $courseName")
+            putExtra("message", "Cancel in ${course.courseName}")
+            putExtra("courseId", courseId)
         }
         val pendingIntent3 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            2,
+            courseId.toInt() * 10 + 3,
             intent3,
             PendingIntent.FLAG_IMMUTABLE
         )
@@ -62,7 +64,7 @@ class TodayScheduleViewModel @Inject constructor(
             return
         }
         notificationBuilder
-            .setContentTitle(courseName)
+            .setContentTitle(course.courseName)
             .addAction(0, "Present", pendingIntent1)
             .addAction(1, "Absent", pendingIntent2)
             .addAction(2, "Cancel", pendingIntent3)

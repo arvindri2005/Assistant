@@ -6,22 +6,38 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import com.arvind.assistant.applicationContextGlobal
+import com.arvind.assistant.db.DBOps
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NotificationReceiver: BroadcastReceiver() {
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    @Inject
+    lateinit var dbOps: DBOps
+    @Inject
+    lateinit var notificationManager: NotificationManagerCompat
+
+    override fun onReceive(context: Context, intent: Intent?) {
 
         val message = intent?.getStringExtra("message")
-//        val courseId = intent?.getStringExtra("courseId")!!.toLong()
-        Log.d("NotificationReceiver", "onReceive: $message")
+        val courseId = intent?.getLongExtra("courseId", 23L)
 
         if(message != null){
-            val notificationManager = NotificationManagerCompat.from(context!!)
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "$message course id: $courseId", Toast.LENGTH_SHORT).show()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                dbOps.getCourseDetailsWithId(courseId!!.toString()).first().let {
+                    Log.d("NotificationReceiver", "Course details: $it")
+                }
+            }
             notificationManager.cancel(1)
+
         }
-//        val notificationManager = NotificationManagerCompat.from(context!!)
-//        Toast.makeText(context, courseId.toString(), Toast.LENGTH_SHORT).show()
-//        notificationManager.cancel(1)
     }
 }

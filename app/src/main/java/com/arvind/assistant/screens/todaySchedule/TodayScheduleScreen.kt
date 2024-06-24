@@ -1,5 +1,6 @@
 package com.arvind.assistant.screens.todaySchedule
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,7 +52,7 @@ fun TodayScheduleScreen(
         ) {
             item{
                 AssistantButton(text = "Notification") {
-                    viewModel.showSimpleNotification(todaySchedule[0].first.courseName, todaySchedule[0].first.courseId)
+                    viewModel.showSimpleNotification(todaySchedule[0].first, todaySchedule[0].first.courseId)
                 }
             }
             item {
