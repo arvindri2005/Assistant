@@ -26,26 +26,26 @@ fun ClassStatusOptions(
     setClassStatus: (CourseClassStatus) -> Unit
 ) {
     Column(Modifier.selectableGroup()) {
-        CourseClassStatus.entries.forEach { dayOfWeek ->
+        CourseClassStatus.entries.forEach { newCourseStatus ->
             Row(
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp)
                     .selectable(
-                        selected = (dayOfWeek == initialStatus),
-                        onClick = { setClassStatus(dayOfWeek) },
+                        selected = (newCourseStatus == initialStatus),
+                        onClick = { setClassStatus(newCourseStatus) },
                         role = Role.RadioButton
                     )
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = (dayOfWeek == initialStatus),
+                    selected = (newCourseStatus == initialStatus),
                     onClick = null // null recommended for accessibility with screenreaders
                 )
                 Text(
                     text = stringResource(
-                        id = when (dayOfWeek) {
+                        id = when (newCourseStatus) {
                             CourseClassStatus.Present -> R.string.present
                             CourseClassStatus.Absent -> R.string.absent
                             CourseClassStatus.Cancelled -> R.string.cancelled
