@@ -52,7 +52,7 @@ fun TodayScheduleScreen(
         ) {
             item{
                 AssistantButton(text = "Notification") {
-                    viewModel.showSimpleNotification(todaySchedule[0].first, todaySchedule[0].first.courseId)
+                    viewModel.showSimpleNotification(todaySchedule[0].first)
                 }
             }
             item {

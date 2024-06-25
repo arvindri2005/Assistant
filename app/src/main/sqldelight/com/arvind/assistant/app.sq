@@ -92,6 +92,16 @@ WHERE CourseSchedule.includeInSchedule <> 0
 AND DATE('now', 'localtime') = Attendance.date
 OR (Attendance.scheduleId IS NULL AND DATE('now', 'localtime') = DATE('now', 'localtime'));
 
+getScheduleIdAndAttendanceIdForTodayByCourseId:
+SELECT Attendance.attendanceId, CourseSchedule.scheduleId
+FROM CourseSchedule
+JOIN Course ON CourseSchedule.courseId = Course.courseId AND CourseSchedule.weekDay = strftime('%w', 'now')
+LEFT JOIN Attendance ON CourseSchedule.scheduleId = Attendance.scheduleId AND Attendance.date = DATE('now', 'localtime')
+WHERE CourseSchedule.includeInSchedule <> 0
+AND DATE('now', 'localtime') = Attendance.date
+OR (Attendance.scheduleId IS NULL AND DATE('now', 'localtime') = DATE('now', 'localtime'))
+AND Course.courseId = ?;
+
 
 getExtraClassesListForToday:
 SELECT Course.courseId, Course.courseName, ExtraClasses.startTime, ExtraClasses.endTime, ExtraClasses.classStatus, ExtraClasses.extraClassId, ExtraClasses.date

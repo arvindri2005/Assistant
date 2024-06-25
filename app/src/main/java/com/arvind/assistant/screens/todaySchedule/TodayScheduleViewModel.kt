@@ -21,36 +21,38 @@ class TodayScheduleViewModel @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
 ): ViewModel() {
 
-    fun showSimpleNotification(course: AttendanceRecordHybrid, courseId: Long){
+    fun showSimpleNotification(course: AttendanceRecordHybrid){
 
         val intent1 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
             putExtra("message", "Present in ${course.courseName}")
-            putExtra("courseId", courseId)
-            putExtra("attendId", course)
+            putExtra("courseId", course.courseId)
+            action = "Present"
         }
         val pendingIntent1 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            courseId.toInt() * 10,
+            course.courseId.toInt() * 10,
             intent1,
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent2 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
             putExtra("message", "Absent in ${course.courseName}")
-            putExtra("courseId", courseId)
+            putExtra("courseId", course.courseId)
+            action = "Absent"
         }
         val pendingIntent2 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            courseId.toInt() * 10 + 2,
+            course.courseId.toInt() * 10 + 2,
             intent2,
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent3 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
             putExtra("message", "Cancel in ${course.courseName}")
-            putExtra("courseId", courseId)
+            putExtra("courseId", course.courseId)
+            action = "Cancelled"
         }
         val pendingIntent3 = PendingIntent.getBroadcast(
             applicationContextGlobal,
-            courseId.toInt() * 10 + 3,
+            course.courseId.toInt() * 10 + 3,
             intent3,
             PendingIntent.FLAG_IMMUTABLE
         )

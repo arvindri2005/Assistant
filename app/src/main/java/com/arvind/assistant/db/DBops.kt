@@ -11,6 +11,7 @@ import com.arvind.assistant.Attendance
 import com.arvind.assistant.CourseSchedule
 import com.arvind.assistant.Database
 import com.arvind.assistant.ExtraClasses
+import com.arvind.assistant.GetScheduleIdAndAttendanceIdForTodayByCourseId
 import com.arvind.assistant.app.AssistantApplication
 import com.arvind.assistant.applicationContextGlobal
 import kotlinx.coroutines.Dispatchers
@@ -178,6 +179,14 @@ class DBOps @Inject constructor(
             queries.markAttendance(attendanceId, classStatus, scheduleId, date, courseId)
         else queries.markAttendanceInsert(classStatus, scheduleId, date, courseId)
     }
+
+    fun getScheduleIdAndAttendanceIdForTodayByCourseId(
+        courseId: Long
+    ): Flow<GetScheduleIdAndAttendanceIdForTodayByCourseId> {
+        return queries.getScheduleIdAndAttendanceIdForTodayByCourseId(courseId)
+            .asFlow().mapToOne(Dispatchers.IO)
+    }
+
 
 
     fun markAttendanceForExtraClass(
