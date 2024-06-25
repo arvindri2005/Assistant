@@ -8,10 +8,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
+import com.arvind.assistant.alarmManager.AlarmItem
+import com.arvind.assistant.alarmManager.AndroidAlarmScheduler
 import com.arvind.assistant.applicationContextGlobal
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.receiver.NotificationReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 
@@ -21,7 +25,15 @@ class TodayScheduleViewModel @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
 ): ViewModel() {
 
+    private val alarmScheduler = AndroidAlarmScheduler(applicationContextGlobal)
+    private var alarmItem= AlarmItem(
+        time = LocalDateTime.now().plusSeconds(20),
+        message = "Wake up"
+    )
+
     fun showSimpleNotification(course: AttendanceRecordHybrid){
+
+        alarmItem.let(alarmScheduler::schedule)
 
         val intent1 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
             putExtra("message", "Present in ${course.courseName}")
