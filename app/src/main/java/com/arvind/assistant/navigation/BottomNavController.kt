@@ -8,6 +8,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.arvind.assistant.alarmManager.AlarmItem
+import com.arvind.assistant.alarmManager.AndroidAlarmScheduler
+import com.arvind.assistant.applicationContextGlobal
 import com.arvind.assistant.screens.createCourse.CreateCourseScreen
 import com.arvind.assistant.screens.myCourses.MyCoursesScreen
 import com.arvind.assistant.db.AttendanceRecordHybrid
@@ -18,6 +21,7 @@ import com.arvind.assistant.screens.calendar.CalendarScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
 import com.arvind.assistant.utils.Constants
+import java.time.LocalDateTime
 
 @Composable
 fun BottomNavController(
@@ -57,7 +61,8 @@ fun BottomNavController(
         composable(Screen.Add.route){
             CreateCourseScreen(
                 createCourse = { courseName, requiredAttendance, scheduleClasses ->
-                    dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
+                    val courseId = dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
+                    setAlarm(courseId, courseName)
                     bottomNavController.popBackStack()
                 }
             )
@@ -95,4 +100,14 @@ fun BottomNavController(
             }
         }
     }
+}
+
+fun setAlarm(courseId: Long, courseName: String){
+    val alarmScheduler = AndroidAlarmScheduler(applicationContextGlobal)
+    val alarmItem= AlarmItem(
+        time = LocalDateTime.now().plusSeconds(20),
+        courseId = courseId,
+        courseName = courseName
+    )
+    alarmScheduler.schedule(alarmItem)
 }

@@ -1,6 +1,5 @@
 package com.arvind.assistant.alarmManager
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -19,9 +18,10 @@ class AndroidAlarmScheduler(
             putExtra("courseId", item.courseId)
             putExtra("courseName", item.courseName)
         }
-        alarmManager.setExactAndAllowWhileIdle(
+        alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
+            AlarmManager.INTERVAL_DAY * 7,
             PendingIntent.getBroadcast(
                 context,
                 item.hashCode(),
