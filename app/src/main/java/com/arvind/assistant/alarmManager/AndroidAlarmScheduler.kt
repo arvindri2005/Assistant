@@ -19,7 +19,7 @@ class AndroidAlarmScheduler(
             putExtra("courseName", item.courseName)
         }
         alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
+            AlarmManager.RTC,
             item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
             AlarmManager.INTERVAL_DAY * 7,
             PendingIntent.getBroadcast(
