@@ -6,7 +6,7 @@ Welcome to the College Student Assistant Android App repository! This app is des
 
 - **Timetable Management**: Easily add, edit, and delete classes from your timetable. ✅
 - **Notification to mark attendance**: Notification to mark attendance after every class ends. 🟨 
-- **Assignment Tracker**: Keep track of your assignments, including due dates and statuses. 🔳
+- **Assignment Tracker**: Keep track of your assignments, including due dates and statuses. 🟨
 - **Notes**: Create and organize notes for different subjects. 🔳
 - **Notifications**: Set reminders for classes, assignments, and exams. 🔳
 - **GPA Calculator**: Calculate your GPA based on your grades. 🔳
