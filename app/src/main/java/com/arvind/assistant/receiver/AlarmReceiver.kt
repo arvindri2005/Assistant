@@ -10,7 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.arvind.assistant.applicationContextGlobal
-import com.arvind.assistant.db.AttendanceRecordHybrid
+import com.arvind.assistant.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -24,8 +24,8 @@ class AlarmReceiver: BroadcastReceiver() {
     lateinit var notificationManager: NotificationManagerCompat
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val courseId = intent?.getLongExtra("courseId", 0)
-        val courseName = intent?.getStringExtra("courseName")
+        val courseId = intent?.getLongExtra(Constants.ALARM_COURSE_ID, 0)
+        val courseName = intent?.getStringExtra(Constants.ALARM_COURSE_NAME)
 
         if (courseName != null && courseId != null) {
             showSimpleNotification(courseName, courseId)
@@ -36,9 +36,9 @@ class AlarmReceiver: BroadcastReceiver() {
     private fun showSimpleNotification(courseName: String, courseId: Long){
 
         val intent1 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Present in $courseName")
-            putExtra("courseId", courseId)
-            action = "Present"
+            putExtra(Constants.NOTIFICATION_COURSE_NAME_ARG, "Present in $courseName")
+            putExtra(Constants.NOTIFICATION_COURSE_ID_ARG, courseId)
+            action = Constants.NOTIFICATION_PRESENT_ACTION
         }
         val pendingIntent1 = PendingIntent.getBroadcast(
             applicationContextGlobal,
@@ -47,9 +47,9 @@ class AlarmReceiver: BroadcastReceiver() {
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent2 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Absent in $courseName")
-            putExtra("courseId", courseId)
-            action = "Absent"
+            putExtra(Constants.NOTIFICATION_COURSE_NAME_ARG, "Absent in $courseName")
+            putExtra(Constants.NOTIFICATION_COURSE_ID_ARG, courseId)
+            action = Constants.NOTIFICATION_ABSENT_ACTION
         }
         val pendingIntent2 = PendingIntent.getBroadcast(
             applicationContextGlobal,
@@ -58,9 +58,9 @@ class AlarmReceiver: BroadcastReceiver() {
             PendingIntent.FLAG_IMMUTABLE
         )
         val intent3 = Intent(applicationContextGlobal, NotificationReceiver::class.java).apply {
-            putExtra("message", "Cancel in $courseName")
-            putExtra("courseId", courseId)
-            action = "Cancelled"
+            putExtra(Constants.NOTIFICATION_COURSE_NAME_ARG, "Cancel in $courseName")
+            putExtra(Constants.NOTIFICATION_COURSE_ID_ARG, courseId)
+            action = Constants.NOTIFICATION_CANCELLED_ACTION
         }
         val pendingIntent3 = PendingIntent.getBroadcast(
             applicationContextGlobal,
@@ -79,9 +79,9 @@ class AlarmReceiver: BroadcastReceiver() {
         }
         notificationBuilder
             .setContentTitle(courseName)
-            .addAction(0, "Present", pendingIntent1)
-            .addAction(1, "Absent", pendingIntent2)
-            .addAction(2, "Cancel", pendingIntent3)
-        notificationManager.notify(courseId.toInt()*23, notificationBuilder.build())
+            .addAction(0, Constants.NOTIFICATION_PRESENT_ACTION, pendingIntent1)
+            .addAction(1, Constants.NOTIFICATION_ABSENT_ACTION, pendingIntent2)
+            .addAction(2, Constants.NOTIFICATION_CANCELLED_ACTION, pendingIntent3)
+        notificationManager.notify(courseId.toInt() * Constants.NOTIFICATION_CHANNEL_ID, notificationBuilder.build())
     }
 }
