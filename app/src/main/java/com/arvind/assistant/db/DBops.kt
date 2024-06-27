@@ -86,6 +86,15 @@ class DBOps @Inject constructor(
 
     }
 
+    fun createAssignment(assignment: AssignmentDetails){
+        queries.createAssignment(
+            courseId = assignment.courseId,
+            assignmentName = assignment.assignmentName,
+            assignmentResourceLink = assignment.assignmentResourceLink,
+            dueDate = assignment.dueDate
+        )
+    }
+
     fun getAllCourses(): Flow<List<CourseDetails>>{
         return queries.getAllCourses(
             mapper = { courseId, courseName, requiredAttendance, _, presents, absents, cancels, unsets ->
@@ -123,6 +132,8 @@ class DBOps @Inject constructor(
         ).asFlow().mapToOne(Dispatchers.IO)
 
     }
+
+
 
 
     fun getScheduleAndExtraClassesForToday():Flow<List<Pair<AttendanceRecordHybrid, AttendanceCounts>>>{

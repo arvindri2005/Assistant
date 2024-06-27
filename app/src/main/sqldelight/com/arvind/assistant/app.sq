@@ -1,6 +1,7 @@
 import com.arvind.assistant.db.CourseClassStatus;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 CREATE TABLE Course (
@@ -50,6 +51,23 @@ CREATE TABLE ExtraClasses (
         REFERENCES Course (courseId)
         ON DELETE CASCADE
 );
+
+CREATE TABLE Assigment(
+    assigmentId INTEGER PRIMARY KEY AUTOINCREMENT,
+    courseId INTEGER NOT NULL,
+    assignmentName TEXT NOT NULL,
+    assignmentResourceLink TEXT,
+    dueDate TEXT AS LocalDateTime NOT NULL,
+    CONSTRAINT fk_course
+        FOREIGN KEY (courseId)
+        REFERENCES Course (courseId)
+        ON DELETE CASCADE
+);
+
+createAssignment:
+INSERT INTO Assigment (courseId, assignmentName, assignmentResourceLink, dueDate)
+VALUES (?, ?, ?, ?);
+
 
 
 updateExtraClassStatus:
