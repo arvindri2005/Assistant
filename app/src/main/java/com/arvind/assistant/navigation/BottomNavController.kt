@@ -1,6 +1,5 @@
 package com.arvind.assistant.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -11,17 +10,18 @@ import androidx.navigation.compose.composable
 import com.arvind.assistant.alarmManager.AlarmItem
 import com.arvind.assistant.alarmManager.AndroidAlarmScheduler
 import com.arvind.assistant.applicationContextGlobal
-import com.arvind.assistant.screens.createCourse.CreateCourseScreen
-import com.arvind.assistant.screens.myCourses.MyCoursesScreen
 import com.arvind.assistant.db.AttendanceRecordHybrid
 import com.arvind.assistant.db.CourseClassStatus
 import com.arvind.assistant.db.DBOps
-import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.calendar.CalendarScreen
-import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
+import com.arvind.assistant.screens.createCourse.CreateCourseScreen
+import com.arvind.assistant.screens.myCourses.MyCoursesScreen
 import com.arvind.assistant.screens.todaySchedule.TodayScheduleScreen
 import com.arvind.assistant.utils.Constants
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Composable
 fun BottomNavController(
@@ -62,7 +62,9 @@ fun BottomNavController(
             CreateCourseScreen(
                 createCourse = { courseName, requiredAttendance, scheduleClasses ->
                     val courseId = dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
-                    setAlarm(courseId, courseName)
+                    scheduleClasses.forEach{ scheduleClass ->
+                        setAlarm(courseId, courseName, scheduleClass.endTime, scheduleClass.dayOfWeek)
+                    }
                     bottomNavController.popBackStack()
                 }
             )
@@ -102,12 +104,22 @@ fun BottomNavController(
     }
 }
 
-fun setAlarm(courseId: Long, courseName: String){
+fun setAlarm(courseId: Long, courseName: String, time: LocalTime, dayOfWeek: DayOfWeek){
+    val date = getNextDate(dayOfWeek)
+    val dateTime = LocalDateTime.of(date, time)
     val alarmScheduler = AndroidAlarmScheduler(applicationContextGlobal)
     val alarmItem= AlarmItem(
-        time = LocalDateTime.now().plusSeconds(20),
+        time = dateTime.plusSeconds(5),
         courseId = courseId,
         courseName = courseName
     )
     alarmScheduler.schedule(alarmItem)
+}
+
+fun getNextDate(dayOfWeek: DayOfWeek): LocalDate {
+    var date = LocalDate.now()
+    while (date.dayOfWeek != dayOfWeek) {
+        date = date.plusDays(1)
+    }
+    return date
 }

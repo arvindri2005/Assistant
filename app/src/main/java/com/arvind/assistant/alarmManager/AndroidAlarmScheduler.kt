@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.arvind.assistant.receiver.AlarmReceiver
+import com.arvind.assistant.utils.Constants
 import java.time.ZoneId
 
 class AndroidAlarmScheduler(
@@ -15,11 +16,11 @@ class AndroidAlarmScheduler(
 
     override fun schedule(item: AlarmItem) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("courseId", item.courseId)
-            putExtra("courseName", item.courseName)
+            putExtra(Constants.ALARM_COURSE_ID, item.courseId)
+            putExtra(Constants.ALARM_COURSE_NAME, item.courseName)
         }
         alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
+            AlarmManager.RTC,
             item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
             AlarmManager.INTERVAL_DAY * 7,
             PendingIntent.getBroadcast(
