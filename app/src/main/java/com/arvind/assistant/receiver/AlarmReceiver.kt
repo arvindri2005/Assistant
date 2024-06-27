@@ -82,6 +82,6 @@ class AlarmReceiver: BroadcastReceiver() {
             .addAction(0, "Present", pendingIntent1)
             .addAction(1, "Absent", pendingIntent2)
             .addAction(2, "Cancel", pendingIntent3)
-        notificationManager.notify(1, notificationBuilder.build())
+        notificationManager.notify(courseId.toInt()*23, notificationBuilder.build())
     }
 }

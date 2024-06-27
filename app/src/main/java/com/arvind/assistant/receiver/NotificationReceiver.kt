@@ -53,7 +53,7 @@ class NotificationReceiver: BroadcastReceiver() {
                     courseId = courseId
                 )
             }
-            notificationManager.cancel(1)
+            notificationManager.cancel(courseId!!.toInt() * 23)
 
         }
     }
