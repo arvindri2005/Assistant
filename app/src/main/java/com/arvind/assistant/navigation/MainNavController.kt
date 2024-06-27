@@ -93,7 +93,7 @@ fun MainNavController(
 
         composable(Screen.CreateAssignment.route){backStackEntry ->
             val courseId = backStackEntry.arguments?.getString(Constants.COURSE_ID_ARG)
-            CreateAssignmentScreen()
+            CreateAssignmentScreen(courseId = courseId!!.toLong())
         }
     }
 

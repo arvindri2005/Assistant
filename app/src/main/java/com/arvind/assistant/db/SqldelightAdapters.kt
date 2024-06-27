@@ -3,6 +3,7 @@ package com.arvind.assistant.db
 import app.cash.sqldelight.ColumnAdapter
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -24,4 +25,9 @@ object LocalTimeAdapter : ColumnAdapter<LocalTime, String> {
 object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
     override fun decode(databaseValue: String): LocalDate = LocalDate.parse(databaseValue)
     override fun encode(value: LocalDate): String = value.format(DateTimeFormatter.ISO_DATE)
+}
+
+object LocalDateTimeAdapter : ColumnAdapter<LocalDateTime, String> {
+    override fun decode(databaseValue: String): LocalDateTime = LocalDateTime.parse(databaseValue)
+    override fun encode(value: LocalDateTime): String = value.format(DateTimeFormatter.ISO_DATE_TIME)
 }

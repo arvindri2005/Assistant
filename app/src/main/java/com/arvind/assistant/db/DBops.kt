@@ -7,6 +7,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.arvind.assistant.Assigment
 import com.arvind.assistant.Attendance
 import com.arvind.assistant.CourseSchedule
 import com.arvind.assistant.Database
@@ -49,6 +50,9 @@ fun getSqliteDB(driver: SqlDriver): Database{
             startTimeAdapter = LocalTimeAdapter,
             endTimeAdapter = LocalTimeAdapter,
             classStatusAdapter = enumAdapter
+        ),
+        AssigmentAdapter = Assigment.Adapter(
+            dueDateAdapter = LocalDateTimeAdapter
         )
 
 
