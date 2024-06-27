@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,7 +58,8 @@ fun CourseDetailsScreen(
     scheduleToBeDeleted: (schedule: ClassScheduleDetails) -> Unit,
     onAddScheduleClass: (schedule: ClassScheduleDetails) -> Unit,
     goToAttendanceRecordScreen: () -> Unit,
-    onExtraClassCreated: (extraClassTimings: ExtraClassTimings) -> Unit
+    onExtraClassCreated: (extraClassTimings: ExtraClassTimings) -> Unit,
+    goToCreateAssignmentScreen: () -> Unit
 ) {
     val showTip = remember{
         mutableStateOf(false)
@@ -104,6 +106,11 @@ fun CourseDetailsScreen(
 
                         }) {
                             Icon(Icons.Rounded.Delete, contentDescription = "Delete")
+                        }
+                        IconButton(onClick = {
+                                goToCreateAssignmentScreen()
+                        }) {
+                            Icon(Icons.Rounded.ThumbUp, contentDescription = "Delete")
                         }
                     }
 
@@ -320,6 +327,9 @@ fun CourseDetailsScreenPreview() {
 
         },
         onExtraClassCreated = {
+
+        },
+        goToCreateAssignmentScreen = {
 
         }
     )

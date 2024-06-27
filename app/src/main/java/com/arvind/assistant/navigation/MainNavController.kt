@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.arvind.assistant.db.DBOps
 import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
+import com.arvind.assistant.screens.createAssignment.CreateAssignmentScreen
 import com.arvind.assistant.screens.main.MainScreen
 import com.arvind.assistant.utils.Constants
 import javax.inject.Inject
@@ -59,6 +60,9 @@ fun MainNavController(
                         },
                         onExtraClassCreated = {extraClassTimings ->
                             dbOps.createExtraClass(course.courseId, extraClassTimings)
+                        },
+                        goToCreateAssignmentScreen = {
+                            mainNavHost.navigate(Screen.CreateAssignment.route.replace("{${Constants.COURSE_ID_ARG}}", courseId))
                         }
                     )
                 }
@@ -66,7 +70,7 @@ fun MainNavController(
         }
 
         composable(Screen.AttendanceRecord.route){backStackEntry ->
-            val courseId = backStackEntry.arguments?.getString("courseId")
+            val courseId = backStackEntry.arguments?.getString(Constants.COURSE_ID_ARG)
             if(courseId!=null){
                 CompositionLocalProvider(
                     androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
@@ -85,6 +89,11 @@ fun MainNavController(
                 }
             }
 
+        }
+
+        composable(Screen.CreateAssignment.route){backStackEntry ->
+            val courseId = backStackEntry.arguments?.getString(Constants.COURSE_ID_ARG)
+            CreateAssignmentScreen()
         }
     }
 
