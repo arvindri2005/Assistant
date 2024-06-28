@@ -7,7 +7,7 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import com.arvind.assistant.Assigment
+import com.arvind.assistant.Assignment
 import com.arvind.assistant.Attendance
 import com.arvind.assistant.CourseSchedule
 import com.arvind.assistant.Database
@@ -51,7 +51,7 @@ fun getSqliteDB(driver: SqlDriver): Database{
             endTimeAdapter = LocalTimeAdapter,
             classStatusAdapter = enumAdapter
         ),
-        AssigmentAdapter = Assigment.Adapter(
+        AssignmentAdapter = Assignment.Adapter(
             dueDateAdapter = LocalDateTimeAdapter
         )
 
@@ -97,6 +97,21 @@ class DBOps @Inject constructor(
             assignmentResourceLink = assignment.assignmentResourceLink,
             dueDate = assignment.dueDate
         )
+    }
+
+    fun getAssignmentsForCourse(courseId: Long): Flow<List<AssignmentDetails>>{
+        return queries.getAssignmentsForCourse(
+            courseId = courseId,
+            mapper = {assignmentId, courseId, assignmentName, assignmentResourceLink, dueDate ->
+                AssignmentDetails(
+                    assignmentId = assignmentId,
+                    courseId = courseId,
+                    assignmentName = assignmentName,
+                    assignmentResourceLink = assignmentResourceLink ?: "",
+                    dueDate = dueDate
+                )
+            }
+        ).asFlow().mapToList(Dispatchers.IO)
     }
 
     fun getAllCourses(): Flow<List<CourseDetails>>{

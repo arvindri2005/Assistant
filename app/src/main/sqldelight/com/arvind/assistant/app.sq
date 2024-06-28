@@ -52,8 +52,8 @@ CREATE TABLE ExtraClasses (
         ON DELETE CASCADE
 );
 
-CREATE TABLE Assigment(
-    assigmentId INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE Assignment(
+    assignmentId INTEGER PRIMARY KEY AUTOINCREMENT,
     courseId INTEGER NOT NULL,
     assignmentName TEXT NOT NULL,
     assignmentResourceLink TEXT,
@@ -65,7 +65,7 @@ CREATE TABLE Assigment(
 );
 
 createAssignment:
-INSERT INTO Assigment (courseId, assignmentName, assignmentResourceLink, dueDate)
+INSERT INTO Assignment (courseId, assignmentName, assignmentResourceLink, dueDate)
 VALUES (?, ?, ?, ?);
 
 
@@ -95,6 +95,9 @@ VALUES (?, ?);
 createCourseScheduleForCourse:
 INSERT INTO CourseSchedule (courseId, weekDay, startTime, endTime, includeInSchedule)
 VALUES (?, ?, ?, ?, ?);
+
+getAssignmentsForCourse:
+SELECT * FROM Assignment WHERE courseId = ?;
 
 
 getCourseListForToday:
