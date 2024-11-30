@@ -10,4 +10,5 @@ sealed class Screen(val route: String) {
     data object Courses : Screen("courses_screen")
     data object CourseDetails : Screen("course_details_screen/{${Constants.COURSE_ID_ARG}}")
     data object AttendanceRecord : Screen("attendanceRecord/{${Constants.COURSE_ID_ARG}}")
+    data object CourseEdit : Screen("course_edit/{${Constants.COURSE_ID_ARG}}")
 }

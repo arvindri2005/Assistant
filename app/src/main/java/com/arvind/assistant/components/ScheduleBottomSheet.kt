@@ -65,8 +65,6 @@ fun ScheduleBottomSheet(
     onDismissRequest: () -> Unit,
     onCreateClass: (ClassScheduleDetails)-> Unit
 ){
-    val configuration = LocalConfiguration.current
-    val screeHeight = configuration.screenHeightDp.dp
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
         onDismissRequest =onDismissRequest,

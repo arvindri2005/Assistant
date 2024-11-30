@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,8 +55,12 @@ fun ExtraClassBottomSheet(
     var state by rememberSaveable {
         mutableStateOf(ExtraClassTimings.defaultTimeAdjusted())
     }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    ModalBottomSheet(onDismissRequest =  onDismissRequest ) {
+    ModalBottomSheet(
+        onDismissRequest =  onDismissRequest,
+        sheetState = sheetState,
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Top,

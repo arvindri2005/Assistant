@@ -43,6 +43,9 @@ fun MainNavController(
                 val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
                 if (course != null) {
                     CourseDetailsScreen(
+                        onGoBack = {
+                            mainNavHost.popBackStack()
+                        },
                         course = course,
                         classes = classes,
                         scheduleToBeDeleted = {schedule->
@@ -59,8 +62,33 @@ fun MainNavController(
                         },
                         onExtraClassCreated = {extraClassTimings ->
                             dbOps.createExtraClass(course.courseId, extraClassTimings)
+                        },
+                        onDeleteCourse = { courseId ->
+                            dbOps.deleteCourse(courseId)
+                        },
+                        goToCourseEditScreen = {
+                            mainNavHost.navigate(Screen.CourseEdit.route.replace("{${Constants.COURSE_ID_ARG}}", courseId))
                         }
                     )
+                }
+            }
+        }
+
+        composable(Screen.CourseEdit.route){backStackEntry->
+            val courseId = backStackEntry.arguments?.getString("courseId")
+            if(courseId!=null){
+                CompositionLocalProvider(
+                    androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
+                ) {
+                    val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
+                    if(course!=null){
+                        CourseEditScreen(
+                            course = course,
+                            onEditCourse = {courseName, requiredAttendance ->
+                                dbOps.updateCourse(course.courseId, courseName, requiredAttendance)
+                            }
+                        )
+                    }
                 }
             }
         }

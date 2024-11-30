@@ -269,6 +269,8 @@ class DBOps @Inject constructor(
         CourseClassStatus.Unset
     )
 
+    fun deleteCourse(courseId: Long) = queries.deleteCourse(courseId)
+
     companion object {
         val instance: DBOps by lazy {
             DBOps(getAndroidSqliteDriver(applicationContextGlobal))
