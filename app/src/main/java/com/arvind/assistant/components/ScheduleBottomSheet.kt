@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -26,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -65,9 +67,10 @@ fun ScheduleBottomSheet(
 ){
     val configuration = LocalConfiguration.current
     val screeHeight = configuration.screenHeightDp.dp
-
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
         onDismissRequest =onDismissRequest,
+        sheetState = sheetState
     ) {
         var selectedWeekDay = rememberSaveable {
             mutableStateOf(initialState?.dayOfWeek ?: LocalDate.now().dayOfWeek)
@@ -163,6 +166,8 @@ fun ScheduleBottomSheet(
             mutableIntStateOf(0)
         }
 
+        Spacer(modifier = Modifier.height(10.dp))
+
         LazyColumn {
             item{
                 HorizontalPager(
@@ -212,6 +217,7 @@ fun ScheduleBottomSheet(
                                     .onSizeChanged { pagerMinSize = maxOf(pagerMinSize, it.height) },
                                 contentAlignment = Alignment.Center
                             ) {
+
                                 TimePicker(state = startTime)
                             }
                         }
