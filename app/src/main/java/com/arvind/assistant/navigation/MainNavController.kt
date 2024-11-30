@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.arvind.assistant.db.DBOps
 import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
+import com.arvind.assistant.screens.courseEdit.CourseEditScreen
 import com.arvind.assistant.screens.main.MainScreen
 import com.arvind.assistant.utils.Constants
 import javax.inject.Inject
@@ -82,12 +83,22 @@ fun MainNavController(
                 ) {
                     val course = dbOps.getCourseDetailsWithId(courseId).collectAsStateWithLifecycle(initialValue = null).value
                     if(course!=null){
-                        CourseEditScreen(
-                            course = course,
-                            onEditCourse = {courseName, requiredAttendance ->
-                                dbOps.updateCourse(course.courseId, courseName, requiredAttendance)
-                            }
-                        )
+                        CompositionLocalProvider(
+                            androidx.lifecycle.compose.LocalLifecycleOwner provides androidx.compose.ui.platform.LocalLifecycleOwner.current
+                        ) {
+                            CourseEditScreen(
+                                course = course,
+                                onEditCourse = {courseName, requiredAttendance ->
+                                    dbOps.updateCourseDetails(
+                                        id = courseId.toLong(),
+                                        name = courseName,
+                                        requiredAttendancePercentage = requiredAttendance,
+                                    )},
+                                onGoBack = {
+                                    mainNavHost.popBackStack()
+                                }
+                            )
+                        }
                     }
                 }
             }

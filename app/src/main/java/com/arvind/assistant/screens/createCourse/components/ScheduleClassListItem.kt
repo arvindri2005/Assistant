@@ -96,6 +96,7 @@ fun ScheduleClassListItem(
             }
 
         }
+
         if(!item.includedInSchedule){
             Surface(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),

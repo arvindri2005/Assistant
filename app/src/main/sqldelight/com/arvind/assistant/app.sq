@@ -126,6 +126,9 @@ SELECT
 FROM
     Course;
 
+udpateCourse:
+UPDATE Course SET courseName = ?, requiredAttendance = ?
+WHERE courseId = ?;
 
 getCoursesDetailsWithId:
 SELECT

@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -223,13 +225,10 @@ fun CourseDetailsScreen(
                     }
                 }
 
-
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    classes.forEachIndexed { index, classDetail ->
+                LazyColumn {
+                    items(classes){ classDetail ->
                         Spacer(modifier = Modifier.height(8.dp))
+
                         ScheduleClassListItem(
                             item = classDetail,
                             onClick = {
@@ -241,12 +240,11 @@ fun CourseDetailsScreen(
                                 scheduleItemToBeDeleted = classDetail
                             }
                         )
-
                         if(showScheduleOptions.value){
                             DropdownMenu(
                                 expanded = showScheduleOptions.value,
                                 onDismissRequest = { showScheduleOptions.value = false },
-                                offset = DpOffset(50.dp, 0.dp)
+                                offset = DpOffset(160.dp, 0.dp)
                             ) {
                                 DropdownMenuItem(
                                     text = {

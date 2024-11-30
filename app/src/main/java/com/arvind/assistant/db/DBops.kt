@@ -91,7 +91,7 @@ class DBOps @Inject constructor(
             mapper = { courseId, courseName, requiredAttendance, _, presents, absents, cancels, unsets ->
 
 
-                CourseDetails(
+                CourseDetails( 
                     courseId = courseId,
                     courseName = courseName,
                     requiredAttendance = requiredAttendance,
@@ -103,6 +103,17 @@ class DBOps @Inject constructor(
                 )
             }
         ).asFlow().mapToList(Dispatchers.IO)
+    }
+
+    fun updateCourseDetails(
+        id: Long,
+        name: String,
+        requiredAttendancePercentage: Double,
+        schedule: List<ClassScheduleDetails>? = null,
+    ) {
+        db.transaction {
+            queries.udpateCourse(name, requiredAttendancePercentage, id)
+        }
     }
 
     fun getCourseDetailsWithId(id: String): Flow<CourseDetails>{
