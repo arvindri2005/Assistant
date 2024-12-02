@@ -2,6 +2,7 @@ package com.arvind.assistant.screens.main
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -73,13 +76,14 @@ fun MainScreen(
                                 }
                             ) {
                                 Icon(
-                                    imageVector = if(index == selectedItemIndex.intValue){
-                                        bottomNavigationItem.selectedIcon
+                                    painter = if(index == selectedItemIndex.intValue){
+                                        painterResource(bottomNavigationItem.selectedIcon)
                                     }else{
-                                        bottomNavigationItem.unSelectedIcon
+                                        painterResource(bottomNavigationItem.unSelectedIcon)
                                     },
                                     contentDescription = bottomNavigationItem.title,
-                                    tint = MaterialTheme.colorScheme.tertiary
+                                    tint = MaterialTheme.colorScheme.tertiary,
+                                    modifier = Modifier.size(25.dp)
                                 )
                             }
                         },

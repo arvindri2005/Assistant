@@ -56,7 +56,7 @@ fun BottomNavController(
 
     NavHost(
         navController = bottomNavController,
-        startDestination = Screen.Add.route
+        startDestination = Screen.Today.route
     ){
         composable(Screen.Add.route){
             CreateCourseScreen(

@@ -113,7 +113,7 @@ fun CourseDetailsScreen(
                 actions = {
                     Row{
                         IconButton(onClick = {
-
+                                goToCourseEditScreen()
                         }) {
                             Icon(Icons.Rounded.Edit, contentDescription = "Info")
                         }
@@ -354,6 +354,7 @@ fun CourseDetailsScreenPreview() {
         goToCourseEditScreen = {
 
         }
+
     )
 }
 
