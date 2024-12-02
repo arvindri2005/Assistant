@@ -64,8 +64,7 @@ fun CreateCourseScreen(
 //                    }
 //                },
 
-                scrollBehavior = scrollBehavior,
-                modifier = Modifier.offset(y = (-40).dp)
+                scrollBehavior = scrollBehavior
             )
         }
     ) { it ->
@@ -73,7 +72,6 @@ fun CreateCourseScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .offset(y = (-50).dp)
         ){
             Column(
                 modifier = Modifier

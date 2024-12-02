@@ -58,17 +58,7 @@ fun BottomNavController(
         navController = bottomNavController,
         startDestination = Screen.Today.route
     ){
-        composable(Screen.Add.route){
-            CreateCourseScreen(
-                createCourse = { courseName, requiredAttendance, scheduleClasses ->
-                    val courseId = dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
-                    scheduleClasses.forEach{ scheduleClass ->
-                        setAlarm(courseId, courseName, scheduleClass.endTime, scheduleClass.dayOfWeek)
-                    }
-                    bottomNavController.popBackStack()
-                }
-            )
-        }
+
         composable(Screen.Calendar.route){
             CalendarScreen()
         }
@@ -91,14 +81,18 @@ fun BottomNavController(
                 MyCoursesScreen(
                     courses = dbOps.getAllCourses()
                         .collectAsStateWithLifecycle(initialValue = listOf()).value,
-                ){courseId ->
-                    mainNavController.navigate(
-                        Screen.CourseDetails.route.replace(
-                            "{${Constants.COURSE_ID_ARG}}",
-                            courseId.toString()
+                    goToCourseDetails = {courseId ->
+                        mainNavController.navigate(
+                            Screen.CourseDetails.route.replace(
+                                "{${Constants.COURSE_ID_ARG}}",
+                                courseId.toString()
+                            )
                         )
-                    )
-                }
+                    },
+                    goToAddCourse = {
+                        mainNavController.navigate(Screen.Add.route)
+                    }
+                )
             }
         }
     }

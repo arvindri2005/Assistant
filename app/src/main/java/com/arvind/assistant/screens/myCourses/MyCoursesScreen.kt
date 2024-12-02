@@ -28,7 +28,8 @@ import com.arvind.assistant.screens.myCourses.components.MyCoursesListItem
 @Composable
 fun MyCoursesScreen(
     courses: List<CourseDetails>,
-    goToCourseDetails: (courseId: Long) -> Unit
+    goToCourseDetails: (courseId: Long) -> Unit,
+    goToAddCourse: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -37,6 +38,15 @@ fun MyCoursesScreen(
                     Text("My Courses")
                 },
                 modifier = Modifier.offset(y = (-40).dp)
+            )
+        },
+        floatingActionButton = {
+            AssistantFAB(
+                icon = Icons.Default.Add,
+                onClick = {
+                    goToAddCourse()
+                },
+                text = "Add Course"
             )
         }
     ){it->

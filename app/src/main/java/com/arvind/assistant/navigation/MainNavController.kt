@@ -11,6 +11,7 @@ import com.arvind.assistant.db.DBOps
 import com.arvind.assistant.screens.attendanceRecord.AttendanceRecordScreen
 import com.arvind.assistant.screens.courseDetails.CourseDetailsScreen
 import com.arvind.assistant.screens.courseEdit.CourseEditScreen
+import com.arvind.assistant.screens.createCourse.CreateCourseScreen
 import com.arvind.assistant.screens.main.MainScreen
 import com.arvind.assistant.utils.Constants
 import javax.inject.Inject
@@ -124,6 +125,18 @@ fun MainNavController(
                 }
             }
 
+        }
+
+        composable(Screen.Add.route){
+            CreateCourseScreen(
+                createCourse = { courseName, requiredAttendance, scheduleClasses ->
+                    val courseId = dbOps.createCourse(courseName, requiredAttendance, scheduleClasses)
+                    scheduleClasses.forEach{ scheduleClass ->
+                        setAlarm(courseId, courseName, scheduleClass.endTime, scheduleClass.dayOfWeek)
+                    }
+                    mainNavHost.popBackStack()
+                }
+            )
         }
     }
 

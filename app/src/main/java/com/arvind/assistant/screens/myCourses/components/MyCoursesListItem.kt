@@ -53,7 +53,7 @@ fun MyCoursesListItem(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = "Current: ${course.currentAttendancePercentage}% Goal: ${course.requiredAttendance.toInt()}%",
+                    text = "Current: ${course.currentAttendancePercentage.toInt()}% Goal: ${course.requiredAttendance.toInt()}%",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
